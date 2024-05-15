@@ -1,0 +1,2 @@
+Server is always running based on the oldest information but sends new button information immediately
+If a player gets far enough behind, the server will forget about them and pretend they're not moving
