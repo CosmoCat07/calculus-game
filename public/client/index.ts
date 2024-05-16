@@ -1,7 +1,7 @@
-import Player from "./Player.js"
+import Player from "../game/Player.js"
 import {clientInputRecord} from "./clientInputRecord.js"
-import State from "./State.js"
-import Bullet from "./Bullet.js"
+import State from "../game/State.js"
+import Bullet from "../game/Bullet.js"
 import {setCurrentState} from "./currentState.js"
 import gameLoop from "./gameLoop.js"
 

@@ -6,20 +6,20 @@ export default class State {
         this.bullets = bullets;
     }
     step() {
-        this.time += STEP_LENGTH;
         for (const player of this.players) {
-            player.move();
+            player.update(this);
         }
         for (const player of this.players) {
             player.collide();
         }
+        this.time += STEP_LENGTH;
     }
     draw() {
+        for (const bullet of this.bullets) {
+            bullet.draw(this.time);
+        }
         for (const player of this.players) {
             player.draw();
-        }
-        for (const bullet of this.bullets) {
-            bullet.draw();
         }
     }
     duplicate() {

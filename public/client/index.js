@@ -1,6 +1,6 @@
-import Player from "./Player.js";
+import Player from "../game/Player.js";
 import { clientInputRecord } from "./clientInputRecord.js";
-import State from "./State.js";
+import State from "../game/State.js";
 import { setCurrentState } from "./currentState.js";
 import gameLoop from "./gameLoop.js";
 const clientPlayer = new Player(0, 0, 0, 0, clientInputRecord);
