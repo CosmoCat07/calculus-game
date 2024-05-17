@@ -11,7 +11,7 @@ let dashing = false
 
 let clientInputRecord = new InputRecord()
 
-addEventListener("keydown", (e) => {
+function keydown(e: KeyboardEvent){
     let now = new Date().getTime()
     if(!keys.has(e.code)){
         if(e.code == FORWARD_KEY){
@@ -37,9 +37,9 @@ addEventListener("keydown", (e) => {
         }
     }
     keys.add(e.code)
-})
+}
 
-addEventListener("keyup", (e) => {
+function keyup(e: KeyboardEvent){
     let now = new Date().getTime()
     if(e.code == FORWARD_KEY){
         clientInputRecord.actions.push(new Input(now, inputTypes.STOP))
@@ -62,9 +62,9 @@ addEventListener("keyup", (e) => {
         clientInputRecord.actions.push(new Input(now, inputTypes.END_DASH))
     }
     keys.delete(e.code)
-})
+}
 
-addEventListener("blur", (e) => {
+function blur(){
     let now = new Date().getTime()
     if(keys.has(LEFT_KEY) || keys.has(RIGHT_KEY)){
         clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT))
@@ -76,6 +76,12 @@ addEventListener("blur", (e) => {
         clientInputRecord.actions.push(new Input(now, inputTypes.END_DASH))
     }
     keys.clear()
-})
+}
 
-export {clientInputRecord}
+function startListening(){
+    addEventListener("keydown", keydown)
+    addEventListener("keyup", keyup)
+    addEventListener("blur", blur)
+}
+
+export {clientInputRecord, startListening}

@@ -22,8 +22,8 @@ export default class Player {
     }
     shoot(state) {
         state.bullets.add(new Bullet(this.x, this.y, BULLET_SPEED * Math.cos(this.rot), BULLET_SPEED * Math.sin(this.rot), state.time));
-        this.xVel -= 2 * Math.cos(this.rot);
-        this.yVel -= 2 * Math.sin(this.rot);
+        // this.xVel -= 2*Math.cos(this.rot)
+        // this.yVel -= 2*Math.sin(this.rot)
     }
     update(state) {
         for (let input of this.inputs.actions) {
