@@ -4,7 +4,7 @@ import { stateHistory } from "./stateHistory.js";
 import Input from "../game/Input.js";
 import inputTypes from "../game/inputTypes.js";
 import { enemyInputRecords } from "./enemyInputRecords.js";
-import gameLoop from "./gameLoop.js";
+import loop from "./loop.js";
 import { setupClientInputRecord } from "./clientInputRecord.js";
 let ws;
 function openSocket() {
@@ -12,7 +12,7 @@ function openSocket() {
     ws.addEventListener('open', () => {
         ws.send("test");
     });
-    window.ws = ws;
+    // window.ws = ws;
     ws.onmessage = () => {
         if (1 < 0) { // If the message is giving a new state
             const time = 0;
@@ -36,7 +36,7 @@ function openSocket() {
             // Set the state to be the initial state
             const id = 0;
             setupClientInputRecord(id);
-            gameLoop();
+            loop();
         }
         // Handle other events like player creation and deletion, or other stuff
     };

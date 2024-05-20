@@ -24,11 +24,11 @@ export default class State {
     }
 
     draw() {
-        for(const bullet of this.bullets){
-            bullet.draw(this.time)
-        }
         for(const player of this.players){
             player.draw()
+        }
+        for(const bullet of this.bullets){
+            bullet.draw(this.time)
         }
     }
 

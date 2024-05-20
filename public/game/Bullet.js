@@ -11,7 +11,7 @@ export default class Bullet {
     draw(now) {
         ctx.beginPath();
         ctx.arc(this.startX + this.xVel * (now - this.startTime), this.startY + this.yVel * (now - this.startTime), BULLET_SIZE, 0, 2 * Math.PI);
-        ctx.fillStyle = "white";
+        ctx.fillStyle = "brown";
         ctx.fill();
     }
 }

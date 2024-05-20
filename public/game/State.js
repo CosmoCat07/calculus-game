@@ -15,11 +15,11 @@ export default class State {
         this.time += STEP_LENGTH;
     }
     draw() {
-        for (const bullet of this.bullets) {
-            bullet.draw(this.time);
-        }
         for (const player of this.players) {
             player.draw();
+        }
+        for (const bullet of this.bullets) {
+            bullet.draw(this.time);
         }
     }
     duplicate() {

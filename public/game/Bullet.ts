@@ -28,7 +28,7 @@ export default class Bullet {
             this.startY + this.yVel*(now - this.startTime),
             BULLET_SIZE, 0, 2*Math.PI
         )
-        ctx.fillStyle = "white"
+        ctx.fillStyle = "brown"
         ctx.fill()
     }
 }
