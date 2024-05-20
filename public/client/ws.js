@@ -8,7 +8,10 @@ import gameLoop from "./gameLoop.js";
 import { setupClientInputRecord } from "./clientInputRecord.js";
 let ws;
 function openSocket() {
-    ws = new WebSocket("ws://localhost:3000");
+    ws = new WebSocket("ws://localhost:3000/socket");
+    ws.addEventListener('open', () => {
+        ws.send("test");
+    });
     ws.onmessage = () => {
         if (1 < 0) { // If the message is giving a new state
             const time = 0;
