@@ -1,7 +1,7 @@
 import InputRecord from "../game/InputRecord.js";
 import Input from "../game/Input.js";
 import inputTypes from "../game/inputTypes.js";
-import { DASH_COOLDOWN, DASH_KEY, FORWARD_KEY, LEFT_KEY, RIGHT_KEY, SHOOT_KEY } from "../game/constants.js";
+import { DASH_COOLDOWN, DASH_KEYS, FORWARD_KEYS, LEFT_KEYS, RIGHT_KEYS, SHOOT_KEYS } from "../game/constants.js";
 let keys = new Set();
 let dir = 0;
 let lastDash = new Date().getTime();
@@ -10,28 +10,36 @@ let clientInputRecord;
 function setupClientInputRecord(id) {
     clientInputRecord = new InputRecord(id);
 }
+function sharesElements(a, b) {
+    for (let elem of a) {
+        if (b.has(elem)) {
+            return true;
+        }
+    }
+    return false;
+}
 function keydown(e) {
     let now = new Date().getTime();
     if (!keys.has(e.code)) {
-        if (e.code == FORWARD_KEY) {
+        if (FORWARD_KEYS.has(e.code)) {
             clientInputRecord.actions.push(new Input(now, inputTypes.FORWARD));
         }
-        if (e.code == LEFT_KEY) {
+        if (LEFT_KEYS.has(e.code)) {
             clientInputRecord.actions.push(new Input(now, inputTypes.LEFT));
             dir = -1;
         }
-        if (e.code == RIGHT_KEY) {
+        if (RIGHT_KEYS.has(e.code)) {
             clientInputRecord.actions.push(new Input(now, inputTypes.RIGHT));
             dir = 1;
         }
-        if (e.code == DASH_KEY && now >= lastDash + DASH_COOLDOWN) {
+        if (DASH_KEYS.has(e.code) && now >= lastDash + DASH_COOLDOWN) {
             // Maybe implement dash buffer?
             // now + Math.max(0, now - lastDash - DASH_COOLDOWN)
             clientInputRecord.actions.push(new Input(now, inputTypes.DASH));
             lastDash = now;
             dashing = true;
         }
-        if (e.code == SHOOT_KEY) {
+        if (SHOOT_KEYS.has(e.code)) {
             clientInputRecord.actions.push(new Input(now, inputTypes.SHOOT));
         }
     }
@@ -39,36 +47,36 @@ function keydown(e) {
 }
 function keyup(e) {
     let now = new Date().getTime();
-    if (e.code == FORWARD_KEY) {
+    if (FORWARD_KEYS.has(e.code)) {
         clientInputRecord.actions.push(new Input(now, inputTypes.STOP));
     }
-    if (e.code == LEFT_KEY && dir == -1) {
-        if (keys.has(RIGHT_KEY)) {
+    if (LEFT_KEYS.has(e.code) && dir == -1) {
+        if (sharesElements(keys, RIGHT_KEYS)) {
             clientInputRecord.actions.push(new Input(now, inputTypes.RIGHT));
         }
         else {
             clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT));
         }
     }
-    if (e.code == RIGHT_KEY && dir == 1) {
-        if (keys.has(LEFT_KEY)) {
+    if (RIGHT_KEYS.has(e.code) && dir == 1) {
+        if (sharesElements(keys, LEFT_KEYS)) {
             clientInputRecord.actions.push(new Input(now, inputTypes.LEFT));
         }
         else {
             clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT));
         }
     }
-    if (e.code == DASH_KEY && dashing) {
+    if (DASH_KEYS.has(e.code) && dashing) {
         clientInputRecord.actions.push(new Input(now, inputTypes.END_DASH));
     }
     keys.delete(e.code);
 }
 function blur() {
     let now = new Date().getTime();
-    if (keys.has(LEFT_KEY) || keys.has(RIGHT_KEY)) {
+    if (sharesElements(keys, LEFT_KEYS) || sharesElements(keys, RIGHT_KEYS)) {
         clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT));
     }
-    if (keys.has(FORWARD_KEY)) {
+    if (sharesElements(keys, FORWARD_KEYS)) {
         clientInputRecord.actions.push(new Input(now, inputTypes.STOP));
     }
     if (dashing) {

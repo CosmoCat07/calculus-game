@@ -13,8 +13,8 @@ export const
     BULLET_SIZE = 10,
     BULLET_SPEED = 0.75,
 
-    FORWARD_KEY = "ArrowUp",
-    LEFT_KEY = "ArrowLeft",
-    RIGHT_KEY = "ArrowRight",
-    DASH_KEY = "KeyZ",
-    SHOOT_KEY = "KeyX"
+    FORWARD_KEYS = new Set(["ArrowUp", "KeyW"]),
+    LEFT_KEYS = new Set(["ArrowLeft", "KeyA"]),
+    RIGHT_KEYS = new Set(["ArrowRight", "KeyD"]),
+    DASH_KEYS = new Set(["ArrowDown", "KeyS", "KeyZ", "KeyL", "ShiftLeft"]),
+    SHOOT_KEYS = new Set(["KeyX", "KeyK", "Space"])
