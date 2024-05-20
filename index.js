@@ -6,9 +6,9 @@ app.use(express.static('public', { index: "./client/index.html" }));
 app.listen(port, () => {
     console.log(`App listening on port ${port}`);
 });
-app.ws('/socket', (ws, req) => {
+app.ws('/socket', (ws) => {
     console.log("Stuff");
-    ws.on('connection', (stream) => {
+    ws.on('connection', () => {
         console.log("Successfully Connected");
     });
     ws.on('message', (msg) => {

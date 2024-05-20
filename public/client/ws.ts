@@ -19,6 +19,8 @@ function openSocket() {
         ws.send("test")
     })
 
+    window.ws = ws;
+
     ws.onmessage = () => {
         if (1 < 0) { // If the message is giving a new state
             const time = 0
