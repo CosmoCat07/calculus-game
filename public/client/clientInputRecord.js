@@ -6,7 +6,10 @@ let keys = new Set();
 let dir = 0;
 let lastDash = new Date().getTime();
 let dashing = false;
-let clientInputRecord = new InputRecord();
+let clientInputRecord;
+function setupClientInputRecord(id) {
+    clientInputRecord = new InputRecord(id);
+}
 function keydown(e) {
     let now = new Date().getTime();
     if (!keys.has(e.code)) {
@@ -78,4 +81,4 @@ function startListening() {
     addEventListener("keyup", keyup);
     addEventListener("blur", blur);
 }
-export { clientInputRecord, startListening };
+export { clientInputRecord, startListening, setupClientInputRecord };

@@ -1,5 +1,6 @@
 export default class InputRecord {
-    constructor() {
+    constructor(id) {
         this.actions = new Array();
+        this.id = id;
     }
 }

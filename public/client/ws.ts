@@ -8,6 +8,7 @@ import inputTypes from "../game/inputTypes.js"
 import {enemyInputRecords} from "./enemyInputRecords.js"
 import InputRecord from "../game/InputRecord.js"
 import gameLoop from "./gameLoop.js"
+import {setupClientInputRecord} from "./clientInputRecord.js"
 
 let ws: WebSocket
 
@@ -36,6 +37,9 @@ function openSocket() {
             }
         }
         if(1 < 0){ // If the message is giving the initial state and the game can now start displaying
+            // Set the state to be the initial state
+            const id = 0
+            setupClientInputRecord(id)
             gameLoop()
         }
         // Handle other events like player creation and deletion, or other stuff

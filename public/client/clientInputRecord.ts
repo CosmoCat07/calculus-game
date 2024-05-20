@@ -9,7 +9,11 @@ let dir = 0
 let lastDash = new Date().getTime()
 let dashing = false
 
-let clientInputRecord = new InputRecord()
+let clientInputRecord: InputRecord
+
+function setupClientInputRecord(id: number){
+    clientInputRecord = new InputRecord(id)
+}
 
 function keydown(e: KeyboardEvent){
     let now = new Date().getTime()
@@ -84,4 +88,4 @@ function startListening(){
     addEventListener("blur", blur)
 }
 
-export {clientInputRecord, startListening}
+export {clientInputRecord, startListening, setupClientInputRecord}
