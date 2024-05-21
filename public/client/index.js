@@ -1,3 +1,4 @@
+window.exposed = {};
 import { openSocket } from "./ws.js";
 openSocket();
 // import Player from "../game/Player.js"
@@ -10,11 +11,12 @@ openSocket();
 //
 // startListening()
 // setupClientInputRecord(0)
-// const clientPlayer = new Player(0, 0, 0, 0, clientInputRecord)
+// const clientPlayer = new Player(clientInputRecord, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 //
 // const players = new Set<Player>
 // players.add(clientPlayer)
 //
 // const state = new State(new Date().getTime(), players, new Set<Bullet>())
 // setCurrentState(state)
+//
 // loop()

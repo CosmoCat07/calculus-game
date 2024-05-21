@@ -10,36 +10,49 @@ import {
     SPEED,
     STEP_LENGTH
 } from "./constants.js"
-import inputTypes from "./inputTypes.js"
+import InputTypes from "./InputTypes.js"
 import {ctx} from "../client/canvas.js"
 import {death, shoot} from "../client/sprites.js"
 import State from "./State.js"
 import Bullet from "./Bullet.js"
+import {inputRecords} from "../client/inputRecords.js";
 
 export default class Player {
     inputs: InputRecord
 
-    turn = 0
-    move = 0
-    slide = 0
+    turn: number
+    move: number
+    slide: number
 
     x: number
     y: number
     xVel: number
     yVel: number
-    rot = 0
-    rotVel = 0
+    rot: number
+    rotVel: number
 
     shootProgress: number
 
 
-    constructor(x: number, y: number, xVel: number, yVel: number, inputs: InputRecord, shootProgress = 1) {
+    constructor(
+        inputs = new InputRecord(0),
+        x = 0, y = 0,
+        xVel = 0, yVel = 0,
+        rot = 0, rotVel = 0,
+        shootProgress = 1,
+        turn = 0, move = 0, slide = 0,
+    ) {
         this.x = x
         this.y = y
         this.xVel = xVel
         this.yVel = yVel
-        this.inputs = inputs
+        this.rot = rot
+        this.rotVel = rotVel
         this.shootProgress = shootProgress
+        this.turn = turn
+        this.move = move
+        this.slide = slide
+        this.inputs = inputs
     }
 
     dash(){
@@ -54,32 +67,32 @@ export default class Player {
     }
 
     update(state: State){
-        for(let input of this.inputs.actions){
+        for(let input of this.inputs.inputs){
             if(state.time <= input.time && input.time < state.time + STEP_LENGTH){
                 switch(input.type){
-                    case inputTypes.FORWARD:
+                    case InputTypes.FORWARD:
                         this.move = 1
                         break
-                    case inputTypes.STOP:
+                    case InputTypes.STOP:
                         this.move = 0
                         break
-                    case inputTypes.LEFT:
+                    case InputTypes.LEFT:
                         this.turn = -1
                         break
-                    case inputTypes.RIGHT:
+                    case InputTypes.RIGHT:
                         this.turn = 1
                         break
-                    case inputTypes.STRAIGHT:
+                    case InputTypes.STRAIGHT:
                         this.turn = 0
                         break
-                    case inputTypes.DASH:
+                    case InputTypes.DASH:
                         this.dash()
                         this.slide = 1
                         break
-                    case inputTypes.END_DASH:
+                    case InputTypes.END_DASH:
                         this.slide = 0
                         break
-                    case inputTypes.SHOOT:
+                    case InputTypes.SHOOT:
                         this.shoot(state)
                         break
                 }

@@ -19,7 +19,3 @@ export default class State {
         return new State(this.time, this.players, this.bullets);
     }
 }
-// export type SerializedState = {
-//     players: Array<SerializedPlayers>
-//     bullets: Array<Bullet>
-// }

@@ -1,19 +1,20 @@
+import InputRecord from "./InputRecord.js";
 import { BULLET_SPEED, DASH_POW, FRICTION, ROT_FRICTION, ROT_SPEED, SHOOT_POINT, SHOOT_TIME, SLIDE_FRICTION, SPEED, STEP_LENGTH } from "./constants.js";
-import inputTypes from "./inputTypes.js";
+import InputTypes from "./InputTypes.js";
 import Bullet from "./Bullet.js";
 export default class Player {
-    constructor(x, y, xVel, yVel, inputs, shootProgress = 1) {
-        this.turn = 0;
-        this.move = 0;
-        this.slide = 0;
-        this.rot = 0;
-        this.rotVel = 0;
+    constructor(inputs = new InputRecord(0), x = 0, y = 0, xVel = 0, yVel = 0, rot = 0, rotVel = 0, shootProgress = 1, turn = 0, move = 0, slide = 0) {
         this.x = x;
         this.y = y;
         this.xVel = xVel;
         this.yVel = yVel;
-        this.inputs = inputs;
+        this.rot = rot;
+        this.rotVel = rotVel;
         this.shootProgress = shootProgress;
+        this.turn = turn;
+        this.move = move;
+        this.slide = slide;
+        this.inputs = inputs;
     }
     dash() {
         this.xVel = DASH_POW * Math.cos(this.rot);
@@ -25,32 +26,32 @@ export default class Player {
         // this.yVel -= 2*Math.sin(this.rot)
     }
     update(state) {
-        for (let input of this.inputs.actions) {
+        for (let input of this.inputs.inputs) {
             if (state.time <= input.time && input.time < state.time + STEP_LENGTH) {
                 switch (input.type) {
-                    case inputTypes.FORWARD:
+                    case InputTypes.FORWARD:
                         this.move = 1;
                         break;
-                    case inputTypes.STOP:
+                    case InputTypes.STOP:
                         this.move = 0;
                         break;
-                    case inputTypes.LEFT:
+                    case InputTypes.LEFT:
                         this.turn = -1;
                         break;
-                    case inputTypes.RIGHT:
+                    case InputTypes.RIGHT:
                         this.turn = 1;
                         break;
-                    case inputTypes.STRAIGHT:
+                    case InputTypes.STRAIGHT:
                         this.turn = 0;
                         break;
-                    case inputTypes.DASH:
+                    case InputTypes.DASH:
                         this.dash();
                         this.slide = 1;
                         break;
-                    case inputTypes.END_DASH:
+                    case InputTypes.END_DASH:
                         this.slide = 0;
                         break;
-                    case inputTypes.SHOOT:
+                    case InputTypes.SHOOT:
                         this.shoot(state);
                         break;
                 }

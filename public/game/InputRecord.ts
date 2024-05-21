@@ -1,9 +1,10 @@
 import Input from "./Input.js"
 
 export default class InputRecord {
-    actions = new Array<Input>()
     id: number
-    constructor(id: number) {
+    inputs: Array<Input>
+    constructor(id: number, inputs = new Array<Input>()) {
         this.id = id
+        this.inputs = inputs
     }
 }
