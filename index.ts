@@ -1,8 +1,9 @@
 import express from "express"
 import expressWs from "express-ws"
-import State from "../public/game/State";
-import Player from "../public/game/Player";
-import InputRecord from "../public/game/InputRecord";
+import State from "./public/game/State.js";
+import Player from "./public/game/Player.js";
+import InputRecord from "./public/game/InputRecord.js";
+import {serializeState} from "./serialize.js";
 
 const port = 3000
 
@@ -15,7 +16,7 @@ app.listen(port, () => {
 })
 
 app.ws('/socket', (ws) => {
-    ws.send(JSON.stringify(new State()));
+    ws.send(JSON.stringify(serializeState(new State())));
     ws.on('connection', () => {
         console.log("Successfully Connected")
     })

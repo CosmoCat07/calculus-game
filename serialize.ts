@@ -30,7 +30,7 @@ export function serializeInputRecord(inputRecord: InputRecord): SerializedInputR
     }
 }
 
-function serializePlayer(player: Player): SerializedPlayer {
+export function serializePlayer(player: Player): SerializedPlayer {
     return {
         x: player.x, y: player.y,
         xVel: player.xVel, yVel: player.yVel,
@@ -41,7 +41,7 @@ function serializePlayer(player: Player): SerializedPlayer {
     }
 }
 
-function serializeBullet(bullet: Bullet): SerializedBullet {
+export function serializeBullet(bullet: Bullet): SerializedBullet {
     return {
         startX: bullet.startX,
         startY: bullet.startY,
@@ -51,7 +51,7 @@ function serializeBullet(bullet: Bullet): SerializedBullet {
     }
 }
 
-function serializeState(state: State): SerializedState {
+export function serializeState(state: State): SerializedState {
     let serializedPlayers = []
     for(let player of state.players){
         serializedPlayers.push(serializePlayer(player))
