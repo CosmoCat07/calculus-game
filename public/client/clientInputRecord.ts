@@ -1,6 +1,6 @@
 import InputRecord from "../game/InputRecord.js"
 import Input from "../game/Input.js"
-import inputTypes from "../game/inputTypes.js"
+import InputTypes from "../game/InputTypes.js"
 import {DASH_COOLDOWN, DASH_KEYS, FORWARD_KEYS, LEFT_KEYS, RIGHT_KEYS, SHOOT_KEYS} from "../game/constants.js"
 
 let keys = new Set<string>()
@@ -28,25 +28,25 @@ function keydown(e: KeyboardEvent){
     let now = new Date().getTime()
     if(!keys.has(e.code)){
         if(FORWARD_KEYS.has(e.code)){
-            clientInputRecord.actions.push(new Input(now, inputTypes.FORWARD))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.FORWARD))
         }
         if(LEFT_KEYS.has(e.code)){
-            clientInputRecord.actions.push(new Input(now, inputTypes.LEFT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.LEFT))
             dir = -1
         }
         if(RIGHT_KEYS.has(e.code)){
-            clientInputRecord.actions.push(new Input(now, inputTypes.RIGHT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.RIGHT))
             dir = 1
         }
         if(DASH_KEYS.has(e.code) && now >= lastDash + DASH_COOLDOWN){
             // Maybe implement dash buffer?
             // now + Math.max(0, now - lastDash - DASH_COOLDOWN)
-            clientInputRecord.actions.push(new Input(now, inputTypes.DASH))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.DASH))
             lastDash = now
             dashing = true
         }
         if(SHOOT_KEYS.has(e.code)){
-            clientInputRecord.actions.push(new Input(now, inputTypes.SHOOT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.SHOOT))
         }
     }
     keys.add(e.code)
@@ -55,24 +55,24 @@ function keydown(e: KeyboardEvent){
 function keyup(e: KeyboardEvent){
     let now = new Date().getTime()
     if(FORWARD_KEYS.has(e.code)){
-        clientInputRecord.actions.push(new Input(now, inputTypes.STOP))
+        clientInputRecord.inputs.push(new Input(now, InputTypes.STOP))
     }
     if(LEFT_KEYS.has(e.code) && dir == -1){
         if(sharesElements(keys, RIGHT_KEYS)){
-            clientInputRecord.actions.push(new Input(now, inputTypes.RIGHT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.RIGHT))
         }else{
-            clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.STRAIGHT))
         }
     }
     if(RIGHT_KEYS.has(e.code) && dir == 1){
         if(sharesElements(keys, LEFT_KEYS)){
-            clientInputRecord.actions.push(new Input(now, inputTypes.LEFT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.LEFT))
         }else{
-            clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT))
+            clientInputRecord.inputs.push(new Input(now, InputTypes.STRAIGHT))
         }
     }
     if(DASH_KEYS.has(e.code) && dashing){
-        clientInputRecord.actions.push(new Input(now, inputTypes.END_DASH))
+        clientInputRecord.inputs.push(new Input(now, InputTypes.END_DASH))
     }
     keys.delete(e.code)
 }
@@ -80,13 +80,13 @@ function keyup(e: KeyboardEvent){
 function blur(){
     let now = new Date().getTime()
     if(sharesElements(keys, LEFT_KEYS) || sharesElements(keys, RIGHT_KEYS)){
-        clientInputRecord.actions.push(new Input(now, inputTypes.STRAIGHT))
+        clientInputRecord.inputs.push(new Input(now, InputTypes.STRAIGHT))
     }
     if(sharesElements(keys, FORWARD_KEYS)){
-        clientInputRecord.actions.push(new Input(now, inputTypes.STOP))
+        clientInputRecord.inputs.push(new Input(now, InputTypes.STOP))
     }
     if(dashing){
-        clientInputRecord.actions.push(new Input(now, inputTypes.END_DASH))
+        clientInputRecord.inputs.push(new Input(now, InputTypes.END_DASH))
     }
     keys.clear()
 }

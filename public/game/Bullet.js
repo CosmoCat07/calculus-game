@@ -6,4 +6,13 @@ export default class Bullet {
         this.yVel = yVel;
         this.startTime = startTime;
     }
+    serialize() {
+        return {
+            startX: this.startX,
+            startY: this.startY,
+            xVel: this.xVel,
+            yVel: this.yVel,
+            startTime: this.startTime,
+        };
+    }
 }

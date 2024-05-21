@@ -1,4 +1,4 @@
-import InputRecord from "./InputRecord.js"
+import InputRecord, {SerializedInputRecord} from "./InputRecord.js"
 import {
     BULLET_SPEED,
     DASH_POW,
@@ -10,7 +10,7 @@ import {
     SPEED,
     STEP_LENGTH
 } from "./constants.js"
-import inputTypes from "./inputTypes.js"
+import InputTypes from "./InputTypes.js"
 import {ctx} from "../client/canvas.js"
 import {death, shoot} from "../client/sprites.js"
 import State from "./State.js"
@@ -30,16 +30,15 @@ export default class Player {
     rot = 0
     rotVel = 0
 
-    shootProgress: number
+    shootProgress = 0
 
 
-    constructor(x: number, y: number, xVel: number, yVel: number, inputs: InputRecord, shootProgress = 1) {
+    constructor(x: number, y: number, xVel: number, yVel: number, inputs: InputRecord) {
         this.x = x
         this.y = y
         this.xVel = xVel
         this.yVel = yVel
         this.inputs = inputs
-        this.shootProgress = shootProgress
     }
 
     dash(){
@@ -54,32 +53,32 @@ export default class Player {
     }
 
     update(state: State){
-        for(let input of this.inputs.actions){
+        for(let input of this.inputs.inputs){
             if(state.time <= input.time && input.time < state.time + STEP_LENGTH){
                 switch(input.type){
-                    case inputTypes.FORWARD:
+                    case InputTypes.FORWARD:
                         this.move = 1
                         break
-                    case inputTypes.STOP:
+                    case InputTypes.STOP:
                         this.move = 0
                         break
-                    case inputTypes.LEFT:
+                    case InputTypes.LEFT:
                         this.turn = -1
                         break
-                    case inputTypes.RIGHT:
+                    case InputTypes.RIGHT:
                         this.turn = 1
                         break
-                    case inputTypes.STRAIGHT:
+                    case InputTypes.STRAIGHT:
                         this.turn = 0
                         break
-                    case inputTypes.DASH:
+                    case InputTypes.DASH:
                         this.dash()
                         this.slide = 1
                         break
-                    case inputTypes.END_DASH:
+                    case InputTypes.END_DASH:
                         this.slide = 0
                         break
-                    case inputTypes.SHOOT:
+                    case InputTypes.SHOOT:
                         this.shoot(state)
                         break
                 }
@@ -115,4 +114,34 @@ export default class Player {
 
         this.rot += this.rotVel
     }
+
+    serialize(): SerializedPlayer {
+        return {
+            x: this.x,
+            y: this.y,
+            xVel: this.xVel,
+            yVel: this.yVel,
+            rot: this.rot,
+            rotVel: this.rotVel,
+            shootProgress: this.shootProgress,
+            turn: this.turn,
+            move: this.move,
+            slide: this.slide,
+            inputs: this.inputs.serialize()
+        }
+    }
+}
+
+export type SerializedPlayer = {
+    x: number,
+    y: number,
+    xVel: number,
+    yVel: number,
+    rot: number,
+    rotVel: number,
+    shootProgress: number,
+    turn: number,
+    move: number,
+    slide: number,
+    inputs: SerializedInputRecord,
 }

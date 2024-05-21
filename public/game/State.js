@@ -18,8 +18,19 @@ export default class State {
         // #TODO THIS IS WRONG
         return new State(this.time, this.players, this.bullets);
     }
+    serialize() {
+        let serializedPlayers = [];
+        for (let player of this.players) {
+            serializedPlayers.push(player.serialize());
+        }
+        let serializedBullets = [];
+        for (let bullet of this.bullets) {
+            serializedBullets.push(bullet.serialize());
+        }
+        return {
+            time: this.time,
+            players: serializedPlayers,
+            bullets: serializedBullets
+        };
+    }
 }
-// export type SerializedState = {
-//     players: Array<SerializedPlayers>
-//     bullets: Array<Bullet>
-// }

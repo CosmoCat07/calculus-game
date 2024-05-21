@@ -20,4 +20,22 @@ export default class Bullet {
 
         this.startTime = startTime
     }
+
+    serialize(): SerializedBullet {
+        return {
+            startX: this.startX,
+            startY: this.startY,
+            xVel: this.xVel,
+            yVel: this.yVel,
+            startTime: this.startTime,
+        }
+    }
+}
+
+export type SerializedBullet = {
+    startX: number,
+    startY: number,
+    xVel: number,
+    yVel: number,
+    startTime: number,
 }
