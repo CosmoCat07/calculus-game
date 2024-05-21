@@ -1,2 +1,2 @@
 const inputRecords = new Map();
-export { enemyInputRecords };
+export { inputRecords };

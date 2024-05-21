@@ -1,18 +1,19 @@
+import InputRecord from "./InputRecord.js";
 import { BULLET_SPEED, DASH_POW, FRICTION, ROT_FRICTION, ROT_SPEED, SHOOT_POINT, SHOOT_TIME, SLIDE_FRICTION, SPEED, STEP_LENGTH } from "./constants.js";
 import InputTypes from "./InputTypes.js";
 import Bullet from "./Bullet.js";
 export default class Player {
-    constructor(x, y, xVel, yVel, inputs) {
-        this.turn = 0;
-        this.move = 0;
-        this.slide = 0;
-        this.rot = 0;
-        this.rotVel = 0;
-        this.shootProgress = 0;
+    constructor(x, y, xVel, yVel, rot = 0, rotVel = 0, shootProgress = 0, turn = 0, move = 0, slide = 0, inputs = new InputRecord(0)) {
         this.x = x;
         this.y = y;
         this.xVel = xVel;
         this.yVel = yVel;
+        this.rot = rot;
+        this.rotVel = rotVel;
+        this.shootProgress = shootProgress;
+        this.turn = turn;
+        this.move = move;
+        this.slide = slide;
         this.inputs = inputs;
     }
     dash() {
@@ -75,20 +76,5 @@ export default class Player {
         this.x += this.xVel;
         this.y += this.yVel;
         this.rot += this.rotVel;
-    }
-    serialize() {
-        return {
-            x: this.x,
-            y: this.y,
-            xVel: this.xVel,
-            yVel: this.yVel,
-            rot: this.rot,
-            rotVel: this.rotVel,
-            shootProgress: this.shootProgress,
-            turn: this.turn,
-            move: this.move,
-            slide: this.slide,
-            inputs: this.inputs.serialize()
-        };
     }
 }

@@ -1,14 +1,5 @@
-import State, {SerializedState} from "../game/State.js"
-import Player from "../game/Player.js"
-import Bullet from "../game/Bullet.js"
-import {currentState, setCurrentState} from "./currentState.js"
-import {stateHistory} from "./stateHistory.js"
-import Input, {SerializedInput} from "../game/Input.js"
-import InputTypes from "../game/InputTypes.js"
-import {inputRecords} from "./inputRecords.js"
-import InputRecord, {SerializedInputRecord} from "../game/InputRecord.js"
-import loop from "./loop.js"
 import {setupClientInputRecord} from "./clientInputRecord.js"
+import {SerializedInputRecord, SerializedState} from "../game/SerializedObjects.js";
 
 let ws: WebSocket
 

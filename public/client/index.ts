@@ -13,7 +13,7 @@ import loop from "./loop.js"
 
 startListening()
 setupClientInputRecord(0)
-const clientPlayer = new Player(0, 0, 0, 0, clientInputRecord)
+const clientPlayer = new Player(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, clientInputRecord)
 
 const players = new Set<Player>
 players.add(clientPlayer)

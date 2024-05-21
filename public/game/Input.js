@@ -3,10 +3,4 @@ export default class Input {
         this.time = time;
         this.type = type;
     }
-    serialize() {
-        return {
-            time: this.time,
-            type: this.type,
-        };
-    }
 }

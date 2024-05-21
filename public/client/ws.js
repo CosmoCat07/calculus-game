@@ -30,7 +30,7 @@ function openSocket() {
             // const inputType = inputTypes.LEFT
             //
             // const input = new Input(time, inputType); // THIS SEMICOLON IS NECESSARY!!!
-            // (enemyInputRecords.get(player) as InputRecord).actions.push(input)
+            // (inputRecords.get(player) as InputRecord).actions.push(input)
             // if (roundedTime < currentState.time) {
             //     setCurrentState(stateHistory.get(roundedTime) as State) // Pray time didn't get rewinded too far
             // }
