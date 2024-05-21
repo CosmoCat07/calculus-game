@@ -35,12 +35,12 @@ export default class Player {
 
 
     constructor(
-        x: number, y: number,
-        xVel: number, yVel: number,
-        rot = 0, rotVel = 0,
-        shootProgress = 0,
-        turn = 0, move = 0, slide = 0,
         inputs = new InputRecord(0),
+        x = 0, y = 0,
+        xVel = 0, yVel = 0,
+        rot = 0, rotVel = 0,
+        shootProgress = 1,
+        turn = 0, move = 0, slide = 0,
     ) {
         this.x = x
         this.y = y

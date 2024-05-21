@@ -3,7 +3,7 @@ import { BULLET_SPEED, DASH_POW, FRICTION, ROT_FRICTION, ROT_SPEED, SHOOT_POINT,
 import InputTypes from "./InputTypes.js";
 import Bullet from "./Bullet.js";
 export default class Player {
-    constructor(x, y, xVel, yVel, rot = 0, rotVel = 0, shootProgress = 0, turn = 0, move = 0, slide = 0, inputs = new InputRecord(0)) {
+    constructor(inputs = new InputRecord(0), x = 0, y = 0, xVel = 0, yVel = 0, rot = 0, rotVel = 0, shootProgress = 1, turn = 0, move = 0, slide = 0) {
         this.x = x;
         this.y = y;
         this.xVel = xVel;

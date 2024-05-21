@@ -11,8 +11,9 @@ let dashing = false
 
 let clientInputRecord: InputRecord
 
-function setupClientInputRecord(id: number){
-    clientInputRecord = new InputRecord(id)
+function setClientInputRecord(newClientInputRecord: InputRecord) {
+    clientInputRecord = newClientInputRecord
+    window.exposed.clientInputRecord = clientInputRecord
 }
 
 function sharesElements<T>(a: Set<T>, b: Set<T>){
@@ -97,4 +98,4 @@ function startListening(){
     addEventListener("blur", blur)
 }
 
-export {clientInputRecord, startListening, setupClientInputRecord}
+export {clientInputRecord, startListening, setClientInputRecord}

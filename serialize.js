@@ -14,7 +14,7 @@ export function serializeInputRecord(inputRecord) {
         inputs: serializedInputs,
     };
 }
-function serializePlayer(player) {
+export function serializePlayer(player) {
     return {
         x: player.x, y: player.y,
         xVel: player.xVel, yVel: player.yVel,
@@ -24,7 +24,7 @@ function serializePlayer(player) {
         inputId: player.inputs.id
     };
 }
-function serializeBullet(bullet) {
+export function serializeBullet(bullet) {
     return {
         startX: bullet.startX,
         startY: bullet.startY,
@@ -33,7 +33,7 @@ function serializeBullet(bullet) {
         startTime: bullet.startTime,
     };
 }
-function serializeState(state) {
+export function serializeState(state) {
     let serializedPlayers = [];
     for (let player of state.players) {
         serializedPlayers.push(serializePlayer(player));

@@ -30,14 +30,7 @@ export function deserializeInputRecord(inputRecord: SerializedInputRecord) {
 }
 
 export function deserializePlayer(player: SerializedPlayer) {
-    return new Player(
-        player.x, player.y,
-        player.xVel, player.yVel,
-        player.rot, player.rotVel,
-        player.shootProgress,
-        player.turn, player.move, player.slide,
-        inputRecords.get(player.inputId)
-    )
+    return new Player(inputRecords.get(player.inputId), player.x, player.y, player.xVel, player.yVel, player.rot, player.rotVel, player.shootProgress, player.turn, player.move, player.slide)
 }
 
 export function deserializeBullet(bullet: SerializedBullet){

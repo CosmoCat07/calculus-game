@@ -1,4 +1,3 @@
-import InputRecord from "../game/InputRecord.js";
 import Input from "../game/Input.js";
 import InputTypes from "../game/InputTypes.js";
 import { DASH_COOLDOWN, DASH_KEYS, FORWARD_KEYS, LEFT_KEYS, RIGHT_KEYS, SHOOT_KEYS } from "../game/constants.js";
@@ -7,8 +6,9 @@ let dir = 0;
 let lastDash = new Date().getTime();
 let dashing = false;
 let clientInputRecord;
-function setupClientInputRecord(id) {
-    clientInputRecord = new InputRecord(id);
+function setClientInputRecord(newClientInputRecord) {
+    clientInputRecord = newClientInputRecord;
+    window.exposed.clientInputRecord = clientInputRecord;
 }
 function sharesElements(a, b) {
     for (let elem of a) {
@@ -89,4 +89,4 @@ function startListening() {
     addEventListener("keyup", keyup);
     addEventListener("blur", blur);
 }
-export { clientInputRecord, startListening, setupClientInputRecord };
+export { clientInputRecord, startListening, setClientInputRecord };
