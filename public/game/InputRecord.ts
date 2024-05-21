@@ -1,25 +1,10 @@
-import Input, {SerializedInput} from "./Input.js"
+import Input from "./Input.js"
 
 export default class InputRecord {
     id: number
-    inputs = new Array<Input>()
-    constructor(id: number) {
+    inputs: Array<Input>
+    constructor(id: number, inputs = new Array<Input>()) {
         this.id = id
+        this.inputs = inputs
     }
-
-    serialize(): SerializedInputRecord {
-        let serializedInputs = []
-        for(let input of this.inputs){
-            serializedInputs.push(input.serialize())
-        }
-        return {
-            id: this.id,
-            inputs: serializedInputs,
-        }
-    }
-}
-
-export type SerializedInputRecord = {
-    id: number,
-    inputs: Array<SerializedInput>,
 }

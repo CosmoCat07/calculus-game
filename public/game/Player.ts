@@ -1,4 +1,4 @@
-import InputRecord, {SerializedInputRecord} from "./InputRecord.js"
+import InputRecord from "./InputRecord.js"
 import {
     BULLET_SPEED,
     DASH_POW,
@@ -15,29 +15,43 @@ import {ctx} from "../client/canvas.js"
 import {death, shoot} from "../client/sprites.js"
 import State from "./State.js"
 import Bullet from "./Bullet.js"
+import {inputRecords} from "../client/inputRecords.js";
 
 export default class Player {
     inputs: InputRecord
 
-    turn = 0
-    move = 0
-    slide = 0
+    turn: number
+    move: number
+    slide: number
 
     x: number
     y: number
     xVel: number
     yVel: number
-    rot = 0
-    rotVel = 0
+    rot: number
+    rotVel: number
 
-    shootProgress = 0
+    shootProgress: number
 
 
-    constructor(x: number, y: number, xVel: number, yVel: number, inputs: InputRecord) {
+    constructor(
+        x: number, y: number,
+        xVel: number, yVel: number,
+        rot = 0, rotVel = 0,
+        shootProgress = 0,
+        turn = 0, move = 0, slide = 0,
+        inputs = new InputRecord(0),
+    ) {
         this.x = x
         this.y = y
         this.xVel = xVel
         this.yVel = yVel
+        this.rot = rot
+        this.rotVel = rotVel
+        this.shootProgress = shootProgress
+        this.turn = turn
+        this.move = move
+        this.slide = slide
         this.inputs = inputs
     }
 
@@ -114,34 +128,4 @@ export default class Player {
 
         this.rot += this.rotVel
     }
-
-    serialize(): SerializedPlayer {
-        return {
-            x: this.x,
-            y: this.y,
-            xVel: this.xVel,
-            yVel: this.yVel,
-            rot: this.rot,
-            rotVel: this.rotVel,
-            shootProgress: this.shootProgress,
-            turn: this.turn,
-            move: this.move,
-            slide: this.slide,
-            inputs: this.inputs.serialize()
-        }
-    }
-}
-
-export type SerializedPlayer = {
-    x: number,
-    y: number,
-    xVel: number,
-    yVel: number,
-    rot: number,
-    rotVel: number,
-    shootProgress: number,
-    turn: number,
-    move: number,
-    slide: number,
-    inputs: SerializedInputRecord,
 }

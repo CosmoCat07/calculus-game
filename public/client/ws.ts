@@ -1,12 +1,12 @@
-import State from "../game/State.js"
+import State, {SerializedState} from "../game/State.js"
 import Player from "../game/Player.js"
 import Bullet from "../game/Bullet.js"
 import {currentState, setCurrentState} from "./currentState.js"
 import {stateHistory} from "./stateHistory.js"
-import Input from "../game/Input.js"
+import Input, {SerializedInput} from "../game/Input.js"
 import InputTypes from "../game/InputTypes.js"
-import {enemyInputRecords} from "./enemyInputRecords.js"
-import InputRecord from "../game/InputRecord.js"
+import {inputRecords} from "./inputRecords.js"
+import InputRecord, {SerializedInputRecord} from "../game/InputRecord.js"
 import loop from "./loop.js"
 import {setupClientInputRecord} from "./clientInputRecord.js"
 
@@ -22,7 +22,8 @@ interface EventData {
 }
 
 interface InitData {
-    // state: SerializedState,
+    inputRecords: Array<SerializedInputRecord>,
+    state: SerializedState,
     id: number
 }
 
@@ -61,7 +62,7 @@ function openSocket() {
             // const inputType = inputTypes.LEFT
             //
             // const input = new Input(time, inputType); // THIS SEMICOLON IS NECESSARY!!!
-            // (enemyInputRecords.get(player) as InputRecord).actions.push(input)
+            // (inputRecords.get(player) as InputRecord).actions.push(input)
             // if (roundedTime < currentState.time) {
             //     setCurrentState(stateHistory.get(roundedTime) as State) // Pray time didn't get rewinded too far
             // }

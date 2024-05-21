@@ -7,16 +7,4 @@ export default class Input {
         this.time = time
         this.type = type
     }
-
-    serialize(): SerializedInput{
-        return {
-            time: this.time,
-            type: this.type,
-        }
-    }
-}
-
-export type SerializedInput = {
-    time: number
-    type: InputTypes
 }

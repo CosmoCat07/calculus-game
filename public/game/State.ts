@@ -1,5 +1,5 @@
-import Player, {SerializedPlayer} from "./Player.js"
-import Bullet, {SerializedBullet} from "./Bullet.js"
+import Player from "./Player.js"
+import Bullet from "./Bullet.js"
 import {STEP_LENGTH} from "./constants.js"
 
 export default class State {
@@ -27,26 +27,4 @@ export default class State {
         // #TODO THIS IS WRONG
         return new State(this.time, this.players, this.bullets)
     }
-
-    serialize() : SerializedState{
-        let serializedPlayers = []
-        for(let player of this.players){
-            serializedPlayers.push(player.serialize())
-        }
-        let serializedBullets = []
-        for(let bullet of this.bullets){
-            serializedBullets.push(bullet.serialize())
-        }
-        return {
-            time: this.time,
-            players: serializedPlayers,
-            bullets: serializedBullets
-        }
-    }
-}
-
-export type SerializedState = {
-    time: number,
-    players: Array<SerializedPlayer>,
-    bullets: Array<SerializedBullet>,
 }
