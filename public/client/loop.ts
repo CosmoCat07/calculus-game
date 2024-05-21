@@ -1,8 +1,8 @@
 import {currentState} from "./currentState.js"
 import {canvas, ctx} from "./canvas.js"
-import {clientInputRecord} from "./clientInputRecord.js"
 import {STEP_LENGTH} from "../game/constants.js"
 import {stateHistory} from "./stateHistory.js"
+import {drawState} from "./draw.js";
 
 export default function loop(){
     while(currentState.time + STEP_LENGTH < new Date().getTime()) {
@@ -11,7 +11,7 @@ export default function loop(){
     }
 
     ctx.clearRect(0, 0, canvas.width, canvas.height)
-    currentState.draw()
+    drawState(currentState)
 
     requestAnimationFrame(loop)
 }

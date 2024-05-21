@@ -7,7 +7,7 @@ export default class State {
     bullets: Set<Bullet>
     time: number
 
-    constructor(time: number, players: Set<Player>, bullets: Set<Bullet>) {
+    constructor(time = 0, players: Set<Player> = new Set<Player>(), bullets: Set<Bullet> = new Set<Bullet>()) {
         this.time = time
         this.players = players
         this.bullets = bullets
@@ -23,17 +23,29 @@ export default class State {
         this.time += STEP_LENGTH
     }
 
-    draw() {
-        for(const player of this.players){
-            player.draw()
-        }
-        for(const bullet of this.bullets){
-            bullet.draw(this.time)
-        }
-    }
-
     duplicate(): State{
         // #TODO THIS IS WRONG
         return new State(this.time, this.players, this.bullets)
     }
+
+    // serialize(){
+    //     let serializedPlayers = []
+    //     for(let player of this.players){
+    //         serializedPlayers.push(player.serialize())
+    //     }
+    //     let serializedBullets = []
+    //     for(let bullet of this.bullets){
+    //         serializedBullets.push(bullet.serialize())
+    //     }
+    //     return {
+    //         time: this.time,
+    //         serializedPlayers,
+    //         serializedBullets
+    //     }
+    // }
 }
+
+// export type SerializedState = {
+//     players: Array<SerializedPlayers>
+//     bullets: Array<Bullet>
+// }

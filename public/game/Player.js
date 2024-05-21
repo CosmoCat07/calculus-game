@@ -1,7 +1,5 @@
-import { BULLET_SPEED, DASH_POW, FRICTION, ROT_FRICTION, ROT_SPEED, SHOOT_FRAMES, SHOOT_POINT, SHOOT_TIME, SIZE, SLIDE_FRICTION, SPEED, STEP_LENGTH } from "./constants.js";
+import { BULLET_SPEED, DASH_POW, FRICTION, ROT_FRICTION, ROT_SPEED, SHOOT_POINT, SHOOT_TIME, SLIDE_FRICTION, SPEED, STEP_LENGTH } from "./constants.js";
 import inputTypes from "./inputTypes.js";
-import { ctx } from "../client/canvas.js";
-import { shoot } from "../client/sprites.js";
 import Bullet from "./Bullet.js";
 export default class Player {
     constructor(x, y, xVel, yVel, inputs, shootProgress = 1) {
@@ -77,13 +75,5 @@ export default class Player {
         this.x += this.xVel;
         this.y += this.yVel;
         this.rot += this.rotVel;
-    }
-    draw() {
-        ctx.save();
-        ctx.translate(this.x, this.y);
-        ctx.rotate(this.rot + Math.PI / 2);
-        ctx.scale(SIZE, SIZE);
-        ctx.drawImage(shoot, 0, Math.floor(this.shootProgress * (SHOOT_FRAMES - 1)) / SHOOT_FRAMES * shoot.height, shoot.width, shoot.height / SHOOT_FRAMES, -shoot.width / shoot.height * SHOOT_FRAMES / 2, -1 / 2, shoot.width / shoot.height * SHOOT_FRAMES, 1);
-        ctx.restore();
     }
 }

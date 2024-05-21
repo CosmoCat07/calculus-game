@@ -115,13 +115,4 @@ export default class Player {
 
         this.rot += this.rotVel
     }
-
-    draw(){
-        ctx.save()
-        ctx.translate(this.x, this.y)
-        ctx.rotate(this.rot + Math.PI/2)
-        ctx.scale(SIZE, SIZE)
-        ctx.drawImage(shoot, 0, Math.floor(this.shootProgress*(SHOOT_FRAMES - 1))/SHOOT_FRAMES*shoot.height, shoot.width, shoot.height/SHOOT_FRAMES, -shoot.width/shoot.height*SHOOT_FRAMES/2, -1/2, shoot.width/shoot.height*SHOOT_FRAMES, 1)
-        ctx.restore()
-    }
 }
