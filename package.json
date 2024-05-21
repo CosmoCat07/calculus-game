@@ -24,6 +24,7 @@
     "typescript": "^5.4.5"
   },
   "devDependencies": {
+    "@flydotio/dockerfile": "^0.5.7",
     "@types/express-ws": "^3.0.4"
   }
 }
