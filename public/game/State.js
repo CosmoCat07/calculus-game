@@ -1,6 +1,6 @@
 import { STEP_LENGTH } from "./constants.js";
 export default class State {
-    constructor(time, players, bullets) {
+    constructor(time = 0, players = new Set(), bullets = new Set()) {
         this.time = time;
         this.players = players;
         this.bullets = bullets;
@@ -14,16 +14,12 @@ export default class State {
         }
         this.time += STEP_LENGTH;
     }
-    draw() {
-        for (const player of this.players) {
-            player.draw();
-        }
-        for (const bullet of this.bullets) {
-            bullet.draw(this.time);
-        }
-    }
     duplicate() {
         // #TODO THIS IS WRONG
         return new State(this.time, this.players, this.bullets);
     }
 }
+// export type SerializedState = {
+//     players: Array<SerializedPlayers>
+//     bullets: Array<Bullet>
+// }

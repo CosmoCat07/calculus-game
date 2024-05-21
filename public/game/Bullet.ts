@@ -20,15 +20,4 @@ export default class Bullet {
 
         this.startTime = startTime
     }
-
-    draw(now: number) {
-        ctx.beginPath()
-        ctx.arc(
-            this.startX + this.xVel*(now - this.startTime),
-            this.startY + this.yVel*(now - this.startTime),
-            BULLET_SIZE, 0, 2*Math.PI
-        )
-        ctx.fillStyle = "brown"
-        ctx.fill()
-    }
 }
