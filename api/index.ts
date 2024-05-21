@@ -1,8 +1,8 @@
 import express from "express"
 import expressWs from "express-ws"
-import State from "./public/game/State.js";
-import Player from "./public/game/Player.js";
-import InputRecord from "./public/game/InputRecord.js";
+import State from "../public/game/State";
+import Player from "../public/game/Player";
+import InputRecord from "../public/game/InputRecord";
 
 const port = 3000
 
