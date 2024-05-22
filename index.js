@@ -39,6 +39,7 @@ server.on('connection', (ws) => {
             const data = dataProcessed.data;
             const input = deserializeInput(data.input);
             serverState.inputRecords.get(id).inputs.push(input);
+            console.log(serverState.inputRecords.get(id));
             let oldestInput = serverState.state.time;
             for (let inputRecord of serverState.inputRecords.values()) {
                 oldestInput = Math.min(inputRecord.inputs[inputRecord.inputs.length - 1].time);
@@ -46,7 +47,14 @@ server.on('connection', (ws) => {
             while (serverState.state.time + STEP_LENGTH < oldestInput) {
                 serverState.state.step();
             }
-            socketList.forEach((socket) => socket.send(dataString));
+            socketList.forEach((socket) => socket.send(JSON.stringify({
+                type: "input",
+                data: {
+                    id: id,
+                    time: data.input.time,
+                    inputType: data.input.type,
+                }
+            })));
         }
     });
 });

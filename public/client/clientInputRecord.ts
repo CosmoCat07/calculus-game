@@ -3,6 +3,7 @@ import Input from "../game/Input.js"
 import InputType from "../game/InputType.js"
 import {DASH_COOLDOWN, DASH_KEYS, FORWARD_KEYS, LEFT_KEYS, RIGHT_KEYS, SHOOT_KEYS} from "../game/constants.js"
 import {ws} from "./ws.js";
+import {deserializeInput} from "../serialization/deserialize.js";
 
 let keys = new Set<string>()
 let dir = 0
@@ -31,7 +32,9 @@ function recordInput(inputType: InputType){
     clientInputRecord.inputs.push(input)
     ws.send(JSON.stringify({
         type: "input",
-        data: input,
+        data: {
+            input: deserializeInput(input)
+        },
     }))
 }
 

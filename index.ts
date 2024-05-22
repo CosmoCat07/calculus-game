@@ -61,6 +61,7 @@ server.on('connection', (ws) => {
             const data = dataProcessed.data as InputData
             const input = deserializeInput(data.input);
             (serverState.inputRecords.get(id) as InputRecord).inputs.push(input)
+            console.log((serverState.inputRecords.get(id) as InputRecord))
 
             let oldestInput = serverState.state.time
             for(let inputRecord of serverState.inputRecords.values()){
@@ -70,7 +71,14 @@ server.on('connection', (ws) => {
                 serverState.state.step()
             }
 
-            socketList.forEach((socket) => socket.send(dataString))
+            socketList.forEach((socket) => socket.send(JSON.stringify({
+                type: "input",
+                data: {
+                    id: id,
+                    time: data.input.time,
+                    inputType: data.input.type,
+                }
+            })))
         }
     })
 })
