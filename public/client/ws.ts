@@ -1,6 +1,6 @@
 import {setClientInputRecord, startListening} from "./clientInputRecord.js"
 import {SerializedInputRecord, SerializedState} from "../serialization/SerializedObjects.js";
-import {deserializeState} from "../serialization/deserialize.js";
+import {deserializeInputRecord, deserializeState} from "../serialization/deserialize.js";
 import {inputRecords} from "./inputRecords.js";
 import {stateHistory} from "./stateHistory.js";
 import {currentState, setCurrentState} from "./currentState.js";
@@ -38,7 +38,8 @@ interface InputData {
 interface refreshData {}
 
 function openSocket() {
-    ws = new WebSocket("ws://localhost:3000/socket")
+    let url = ((location.protocol === "http:" || location.hostname === "localhost") ? "ws:" : "wss:") + location.host + location.pathname
+    ws = new WebSocket(url + "socket")
 
     window.ws = ws;
 
@@ -47,9 +48,10 @@ function openSocket() {
         let eventData = JSON.parse(event.data) as EventData
         if (eventData.type == "init") {
             const data = eventData.data as InitData
+            console.log(data)
 
             for(let inputRecord of data.inputRecords){
-                inputRecords.set(inputRecord.id, inputRecord)
+                inputRecords.set(inputRecord.id, deserializeInputRecord(inputRecord))
             }
             setClientInputRecord(inputRecords.get(data.id) as InputRecord)
 

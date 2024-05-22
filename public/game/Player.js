@@ -14,7 +14,7 @@ export default class Player {
         this.turn = turn;
         this.move = move;
         this.slide = slide;
-        this.inputs = inputs;
+        this.inputRecord = inputs;
     }
     dash() {
         this.xVel = DASH_POW * Math.cos(this.rot);
@@ -26,7 +26,7 @@ export default class Player {
         // this.yVel -= 2*Math.sin(this.rot)
     }
     update(state) {
-        for (let input of this.inputs.inputs) {
+        for (let input of this.inputRecord.inputs) {
             if (state.time <= input.time && input.time < state.time + STEP_LENGTH) {
                 switch (input.type) {
                     case InputType.FORWARD:

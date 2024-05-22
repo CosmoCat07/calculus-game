@@ -1,5 +1,5 @@
 import { setClientInputRecord, startListening } from "./clientInputRecord.js";
-import { deserializeState } from "../serialization/deserialize.js";
+import { deserializeInputRecord, deserializeState } from "../serialization/deserialize.js";
 import { inputRecords } from "./inputRecords.js";
 import { stateHistory } from "./stateHistory.js";
 import { currentState, setCurrentState } from "./currentState.js";
@@ -9,15 +9,17 @@ import { STEP_LENGTH } from "../game/constants.js";
 let ws;
 let referenceTime;
 function openSocket() {
-    ws = new WebSocket("ws://localhost:3000/socket");
+    let url = ((location.protocol === "http:" || location.hostname === "localhost") ? "ws:" : "wss:") + location.host + location.pathname;
+    ws = new WebSocket(url + "socket");
     window.ws = ws;
     ws.onmessage = (event) => {
         // Set the state to be the initial state
         let eventData = JSON.parse(event.data);
         if (eventData.type == "init") {
             const data = eventData.data;
+            console.log(data);
             for (let inputRecord of data.inputRecords) {
-                inputRecords.set(inputRecord.id, inputRecord);
+                inputRecords.set(inputRecord.id, deserializeInputRecord(inputRecord));
             }
             setClientInputRecord(inputRecords.get(data.id));
             const state = deserializeState(data.state);

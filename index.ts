@@ -38,7 +38,7 @@ server.on('connection', (ws) => {
     serverState.playersJoined++
 
     const newInputRecord = new InputRecord(id)
-    serverState.inputRecords.set(id, serializeInputRecord(newInputRecord))
+    serverState.inputRecords.set(id, newInputRecord)
     const newPlayer = new Player(newInputRecord)
     serverState.state.players.add(newPlayer)
 
@@ -61,13 +61,14 @@ server.on('connection', (ws) => {
             const data = dataProcessed.data as InputData
             const input = deserializeInput(data.input);
             (serverState.inputRecords.get(id) as InputRecord).inputs.push(input)
-            console.log((serverState.inputRecords.get(id) as InputRecord))
+            // console.log((serverState.inputRecords.get(id)))
 
             let oldestInput = serverState.state.time
             for(let inputRecord of serverState.inputRecords.values()){
                 oldestInput = Math.min(inputRecord.inputs[inputRecord.inputs.length - 1].time)
             }
             while(serverState.state.time + STEP_LENGTH < oldestInput){
+                // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
                 serverState.state.step()
             }
 

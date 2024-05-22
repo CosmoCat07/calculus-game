@@ -18,7 +18,7 @@ import Bullet from "./Bullet.js"
 import {inputRecords} from "../client/inputRecords.js";
 
 export default class Player {
-    inputs: InputRecord
+    inputRecord: InputRecord
 
     turn: number
     move: number
@@ -52,7 +52,7 @@ export default class Player {
         this.turn = turn
         this.move = move
         this.slide = slide
-        this.inputs = inputs
+        this.inputRecord = inputs
     }
 
     dash(){
@@ -67,7 +67,7 @@ export default class Player {
     }
 
     update(state: State){
-        for(let input of this.inputs.inputs){
+        for(let input of this.inputRecord.inputs){
             if(state.time <= input.time && input.time < state.time + STEP_LENGTH){
                 switch(input.type){
                     case InputType.FORWARD:

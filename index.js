@@ -17,7 +17,7 @@ server.on('connection', (ws) => {
     const id = serverState.playersJoined;
     serverState.playersJoined++;
     const newInputRecord = new InputRecord(id);
-    serverState.inputRecords.set(id, serializeInputRecord(newInputRecord));
+    serverState.inputRecords.set(id, newInputRecord);
     const newPlayer = new Player(newInputRecord);
     serverState.state.players.add(newPlayer);
     const serializedInputRecords = new Array();
@@ -39,12 +39,13 @@ server.on('connection', (ws) => {
             const data = dataProcessed.data;
             const input = deserializeInput(data.input);
             serverState.inputRecords.get(id).inputs.push(input);
-            console.log(serverState.inputRecords.get(id));
+            // console.log((serverState.inputRecords.get(id)))
             let oldestInput = serverState.state.time;
             for (let inputRecord of serverState.inputRecords.values()) {
                 oldestInput = Math.min(inputRecord.inputs[inputRecord.inputs.length - 1].time);
             }
             while (serverState.state.time + STEP_LENGTH < oldestInput) {
+                // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
                 serverState.state.step();
             }
             socketList.forEach((socket) => socket.send(JSON.stringify({

@@ -1,5 +1,5 @@
 export const
-    STEP_LENGTH = 10,
+    STEP_LENGTH = 100,
 
     SIZE = 50,
     SPEED = 0.25,

@@ -21,7 +21,7 @@ export function serializePlayer(player) {
         rot: player.rot, rotVel: player.rotVel,
         shootProgress: player.shootProgress,
         turn: player.turn, move: player.move, slide: player.slide,
-        inputId: player.inputs.id
+        inputId: player.inputRecord.id
     };
 }
 export function serializeBullet(bullet) {
