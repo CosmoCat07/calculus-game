@@ -2,6 +2,7 @@ import InputRecord from "../game/InputRecord.js"
 import Input from "../game/Input.js"
 import InputType from "../game/InputType.js"
 import {DASH_COOLDOWN, DASH_KEYS, FORWARD_KEYS, LEFT_KEYS, RIGHT_KEYS, SHOOT_KEYS} from "../game/constants.js"
+import {ws} from "./ws.js";
 
 let keys = new Set<string>()
 let dir = 0
@@ -26,8 +27,12 @@ function sharesElements<T>(a: Set<T>, b: Set<T>){
 }
 
 function recordInput(inputType: InputType){
-    clientInputRecord.inputs.push(new Input(new Date().getTime(), inputType))
-
+    let input = new Input(new Date().getTime(), inputType)
+    clientInputRecord.inputs.push(input)
+    ws.send(JSON.stringify({
+        type: "input",
+        data: input,
+    }))
 }
 
 function keydown(e: KeyboardEvent){
@@ -59,7 +64,6 @@ function keydown(e: KeyboardEvent){
 }
 
 function keyup(e: KeyboardEvent){
-    let now = new Date().getTime()
     if(FORWARD_KEYS.has(e.code)){
         recordInput(InputType.STOP)
     }
@@ -84,7 +88,6 @@ function keyup(e: KeyboardEvent){
 }
 
 function blur(){
-    let now = new Date().getTime()
     if(sharesElements(keys, LEFT_KEYS) || sharesElements(keys, RIGHT_KEYS)){
         recordInput(InputType.STRAIGHT)
     }

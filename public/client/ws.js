@@ -1,5 +1,5 @@
 import { setClientInputRecord, startListening } from "./clientInputRecord.js";
-import { deserializeState } from "./deserialize.js";
+import { deserializeState } from "../serialization/deserialize.js";
 import { inputRecords } from "./inputRecords.js";
 import { stateHistory } from "./stateHistory.js";
 import { currentState, setCurrentState } from "./currentState.js";
@@ -10,9 +10,6 @@ let ws;
 let referenceTime;
 function openSocket() {
     ws = new WebSocket("ws://localhost:3000/socket");
-    ws.addEventListener('open', () => {
-        ws.send("test");
-    });
     window.ws = ws;
     ws.onmessage = (event) => {
         // Set the state to be the initial state

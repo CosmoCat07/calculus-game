@@ -40,10 +40,6 @@ interface refreshData {}
 function openSocket() {
     ws = new WebSocket("ws://localhost:3000/socket")
 
-    ws.addEventListener('open', () => {
-        ws.send("test")
-    })
-
     window.ws = ws;
 
     ws.onmessage = (event) => { // If the message is giving the initial state and the game can now start displaying
