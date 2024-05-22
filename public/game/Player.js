@@ -26,6 +26,8 @@ export default class Player {
         // this.yVel -= 2*Math.sin(this.rot)
     }
     update(state) {
+        // console.log(`inputs from ${state.time} to ${state.time + STEP_LENGTH}`)
+        // console.log(this.inputRecord.id)
         for (let input of this.inputRecord.inputs) {
             if (state.time <= input.time && input.time < state.time + STEP_LENGTH) {
                 switch (input.type) {
@@ -76,5 +78,8 @@ export default class Player {
         this.x += this.xVel;
         this.y += this.yVel;
         this.rot += this.rotVel;
+    }
+    copy() {
+        return new Player(this.inputRecord, this.x, this.y, this.xVel, this.yVel, this.rot, this.rotVel, this.shootProgress, this.turn, this.move, this.slide);
     }
 }

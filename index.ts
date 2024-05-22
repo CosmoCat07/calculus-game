@@ -2,7 +2,7 @@ import express from "express"
 import State from "./public/game/State.js";
 import Player from "./public/game/Player.js";
 import InputRecord from "./public/game/InputRecord.js";
-import {serializeInputRecord, serializeState} from "./public/serialization/serialize.js";
+import {serializeInputRecord, serializePlayer, serializeState} from "./public/serialization/serialize.js";
 import {inputRecords} from "./public/client/inputRecords.js";
 import {ServerState} from "./public/game/ServerState.js";
 import {SerializedInput, SerializedInputRecord} from "./public/serialization/SerializedObjects.js";
@@ -29,6 +29,10 @@ interface InputData {
 
 const socketList = new Array<WebSocket>()
 
+function sendAll(message: String){
+    socketList.forEach((socket) => socket.send(message))
+}
+
 const server = new WebSocket.Server({server: app.listen(port)});
 
 server.on('connection', (ws) => {
@@ -39,6 +43,7 @@ server.on('connection', (ws) => {
 
     const newInputRecord = new InputRecord(id)
     serverState.inputRecords.set(id, newInputRecord)
+
     const newPlayer = new Player(newInputRecord)
     serverState.state.players.add(newPlayer)
 
@@ -54,6 +59,14 @@ server.on('connection', (ws) => {
             inputRecords: serializedInputRecords,
         },
     }))
+    sendAll(JSON.stringify({
+        type: "join",
+        data: {
+            id: id,
+            time: Date.now(),
+            player: serializePlayer(newPlayer),
+        }
+    }))
     ws.on('message', (dataRaw: Buffer) => {
         const dataString = dataRaw.toString()
         const dataProcessed = JSON.parse(dataString) as EventData
@@ -65,21 +78,23 @@ server.on('connection', (ws) => {
 
             let oldestInput = serverState.state.time
             for(let inputRecord of serverState.inputRecords.values()){
-                oldestInput = Math.min(inputRecord.inputs[inputRecord.inputs.length - 1].time)
+                if(inputRecord.inputs.length > 0) {
+                    oldestInput = Math.min(inputRecord.inputs[inputRecord.inputs.length - 1].time)
+                }
             }
             while(serverState.state.time + STEP_LENGTH < oldestInput){
                 // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
                 serverState.state.step()
             }
 
-            socketList.forEach((socket) => socket.send(JSON.stringify({
+            sendAll(JSON.stringify({
                 type: "input",
                 data: {
                     id: id,
                     time: data.input.time,
                     inputType: data.input.type,
                 }
-            })))
+            }))
         }
     })
 })

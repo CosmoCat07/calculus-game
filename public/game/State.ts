@@ -24,7 +24,14 @@ export default class State {
     }
 
     duplicate(): State{
-        // #TODO THIS IS WRONG
-        return new State(this.time, this.players, this.bullets)
+        const players = []
+        for(const player of this.players){
+            players.push(player.copy())
+        }
+        const bullets = []
+        for(const bullet of this.bullets){
+            bullets.push(bullet)
+        }
+        return new State(this.time, new Set(players), new Set(bullets))
     }
 }
