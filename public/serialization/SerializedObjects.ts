@@ -1,8 +1,8 @@
-import InputTypes from "./InputTypes.js";
+import InputType from "../game/InputType.js";
 
 export type SerializedInput = {
     time: number
-    type: InputTypes
+    type: InputType
 }
 
 export type SerializedInputRecord = {

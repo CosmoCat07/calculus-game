@@ -1,4 +1,4 @@
-enum InputTypes {
+enum InputType {
     FORWARD,
     STOP,
     LEFT,
@@ -9,4 +9,4 @@ enum InputTypes {
     SHOOT,
 }
 
-export default InputTypes
+export default InputType

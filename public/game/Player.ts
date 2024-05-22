@@ -10,7 +10,7 @@ import {
     SPEED,
     STEP_LENGTH
 } from "./constants.js"
-import InputTypes from "./InputTypes.js"
+import InputType from "./InputType.js"
 import {ctx} from "../client/canvas.js"
 import {death, shoot} from "../client/sprites.js"
 import State from "./State.js"
@@ -70,29 +70,29 @@ export default class Player {
         for(let input of this.inputs.inputs){
             if(state.time <= input.time && input.time < state.time + STEP_LENGTH){
                 switch(input.type){
-                    case InputTypes.FORWARD:
+                    case InputType.FORWARD:
                         this.move = 1
                         break
-                    case InputTypes.STOP:
+                    case InputType.STOP:
                         this.move = 0
                         break
-                    case InputTypes.LEFT:
+                    case InputType.LEFT:
                         this.turn = -1
                         break
-                    case InputTypes.RIGHT:
+                    case InputType.RIGHT:
                         this.turn = 1
                         break
-                    case InputTypes.STRAIGHT:
+                    case InputType.STRAIGHT:
                         this.turn = 0
                         break
-                    case InputTypes.DASH:
+                    case InputType.DASH:
                         this.dash()
                         this.slide = 1
                         break
-                    case InputTypes.END_DASH:
+                    case InputType.END_DASH:
                         this.slide = 0
                         break
-                    case InputTypes.SHOOT:
+                    case InputType.SHOOT:
                         this.shoot(state)
                         break
                 }

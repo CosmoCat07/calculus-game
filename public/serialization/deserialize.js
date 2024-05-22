@@ -1,6 +1,6 @@
 import Input from "../game/Input.js";
 import InputRecord from "../game/InputRecord.js";
-import { inputRecords } from "./inputRecords.js";
+import { inputRecords } from "../client/inputRecords.js";
 import Player from "../game/Player.js";
 import Bullet from "../game/Bullet.js";
 import State from "../game/State.js";

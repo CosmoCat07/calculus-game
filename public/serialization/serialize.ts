@@ -1,14 +1,14 @@
-import InputRecord from "./public/game/InputRecord.js"
-import Input from "./public/game/Input.js"
-import Player from "./public/game/Player.js"
-import Bullet from "./public/game/Bullet.js"
-import State from "./public/game/State.js"
+import InputRecord from "../game/InputRecord.js"
+import Input from "../game/Input.js"
+import Player from "../game/Player.js"
+import Bullet from "../game/Bullet.js"
+import State from "../game/State.js"
 import {
     SerializedBullet,
     SerializedInput,
     SerializedInputRecord,
     SerializedPlayer, SerializedState
-} from "./public/game/SerializedObjects.js"
+} from "./SerializedObjects.js"
 
 
 

@@ -3,7 +3,7 @@ import expressWs from "express-ws"
 import State from "./public/game/State.js";
 import Player from "./public/game/Player.js";
 import InputRecord from "./public/game/InputRecord.js";
-import {serializeInputRecord, serializeState} from "./serialize.js";
+import {serializeInputRecord, serializeState} from "./public/serialization/serialize.js";
 import {inputRecords} from "./public/client/inputRecords.js";
 
 const port = 3000

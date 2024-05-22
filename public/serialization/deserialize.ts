@@ -6,8 +6,8 @@ import {
     SerializedInputRecord,
     SerializedPlayer,
     SerializedState
-} from "../game/SerializedObjects.js";
-import {inputRecords} from "./inputRecords.js";
+} from "./SerializedObjects.js";
+import {inputRecords} from "../client/inputRecords.js";
 import Player from "../game/Player.js";
 import Bullet from "../game/Bullet.js";
 import State from "../game/State.js";
