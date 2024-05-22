@@ -18,7 +18,7 @@ export function deserializePlayer(player) {
     return new Player(inputRecords.get(player.inputId), player.x, player.y, player.xVel, player.yVel, player.rot, player.rotVel, player.shootProgress, player.turn, player.move, player.slide);
 }
 export function deserializeBullet(bullet) {
-    return new Bullet(bullet.startX, bullet.startY, bullet.xVel, bullet.yVel, bullet.startTime);
+    return new Bullet(bullet.startX, bullet.startY, bullet.xVel, bullet.yVel, bullet.startTime, bullet.summonerId);
 }
 export function deserializeState(state) {
     const players = new Set();

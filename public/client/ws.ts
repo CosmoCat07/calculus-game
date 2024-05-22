@@ -12,6 +12,7 @@ import {STEP_LENGTH} from "../game/constants.js";
 import State from "../game/State.js";
 import {clientStateEvents} from "./clientStateEvents.js";
 import {JoinEvent} from "./stateEventTypes.js";
+import {setOffset} from "./time.js";
 
 let ws: WebSocket
 let referenceTime: number
@@ -28,6 +29,7 @@ interface EventData {
 interface InitData {
     inputRecords: Array<SerializedInputRecord>,
     state: SerializedState,
+    time: number
     id: number
 }
 
@@ -69,6 +71,8 @@ function openSocket() {
             setCurrentState(state)
 
             referenceTime = state.time
+
+            setOffset(data.time - new Date().getTime())
 
             startListening()
             loop()

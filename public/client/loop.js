@@ -4,8 +4,9 @@ import { STEP_LENGTH } from "../game/constants.js";
 import { stateHistory } from "./stateHistory.js";
 import { drawState } from "./draw.js";
 import { clientStateEvents } from "./clientStateEvents.js";
+import { getTime } from "./time.js";
 export default function loop() {
-    while (currentState.time + STEP_LENGTH < new Date().getTime()) {
+    while (currentState.time + STEP_LENGTH < getTime()) {
         for (let event of clientStateEvents) {
             if (currentState.time <= event.time && event.time < currentState.time + STEP_LENGTH) {
                 event.activate(currentState);

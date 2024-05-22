@@ -10,7 +10,7 @@ export default class State {
             player.update(this);
         }
         for (const player of this.players) {
-            player.collide();
+            player.collide(this);
         }
         this.time += STEP_LENGTH;
     }

@@ -48,6 +48,7 @@ export function serializeBullet(bullet: Bullet): SerializedBullet {
         xVel: bullet.xVel,
         yVel: bullet.yVel,
         startTime: bullet.startTime,
+        summonerId: bullet.summonerId,
     }
 }
 

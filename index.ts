@@ -4,7 +4,7 @@ import Player from "./public/game/Player.js";
 import InputRecord from "./public/game/InputRecord.js";
 import {serializeInputRecord, serializePlayer, serializeState} from "./public/serialization/serialize.js";
 import {inputRecords} from "./public/client/inputRecords.js";
-import {ServerState} from "./public/game/ServerState.js";
+import {ServerState} from "./ServerState.js";
 import {SerializedInput, SerializedInputRecord} from "./public/serialization/SerializedObjects.js";
 import {deserializeInput} from "./public/serialization/deserialize.js";
 import Input from "./public/game/Input.js";
@@ -33,7 +33,11 @@ function sendAll(message: String){
     socketList.forEach((socket) => socket.send(message))
 }
 
-const server = new WebSocket.Server({server: app.listen(port)});
+const server = new WebSocket.Server({server: app.listen(port)})
+
+async function delay(time: number){
+    return new Promise<number>(resolve => setTimeout(resolve, time))
+}
 
 server.on('connection', (ws) => {
     socketList.push(ws)
@@ -55,6 +59,7 @@ server.on('connection', (ws) => {
         type: "init",
         data: {
             id: id,
+            time: new Date().getTime(),
             state: serializeState(serverState.state),
             inputRecords: serializedInputRecords,
         },
@@ -67,7 +72,8 @@ server.on('connection', (ws) => {
             player: serializePlayer(newPlayer),
         }
     }))
-    ws.on('message', (dataRaw: Buffer) => {
+    ws.on('message', async (dataRaw: Buffer) => {
+        // await delay(200)
         const dataString = dataRaw.toString()
         const dataProcessed = JSON.parse(dataString) as EventData
         if (dataProcessed.type === "input") {

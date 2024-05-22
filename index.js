@@ -1,8 +1,17 @@
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 import express from "express";
 import Player from "./public/game/Player.js";
 import InputRecord from "./public/game/InputRecord.js";
 import { serializeInputRecord, serializePlayer, serializeState } from "./public/serialization/serialize.js";
-import { ServerState } from "./public/game/ServerState.js";
+import { ServerState } from "./ServerState.js";
 import { deserializeInput } from "./public/serialization/deserialize.js";
 import WebSocket from 'ws';
 import { STEP_LENGTH } from "./public/game/constants.js";
@@ -15,6 +24,11 @@ function sendAll(message) {
     socketList.forEach((socket) => socket.send(message));
 }
 const server = new WebSocket.Server({ server: app.listen(port) });
+function delay(time) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return new Promise(resolve => setTimeout(resolve, time));
+    });
+}
 server.on('connection', (ws) => {
     socketList.push(ws);
     const id = serverState.playersJoined;
@@ -31,6 +45,7 @@ server.on('connection', (ws) => {
         type: "init",
         data: {
             id: id,
+            time: new Date().getTime(),
             state: serializeState(serverState.state),
             inputRecords: serializedInputRecords,
         },
@@ -43,7 +58,8 @@ server.on('connection', (ws) => {
             player: serializePlayer(newPlayer),
         }
     }));
-    ws.on('message', (dataRaw) => {
+    ws.on('message', (dataRaw) => __awaiter(void 0, void 0, void 0, function* () {
+        // await delay(200)
         const dataString = dataRaw.toString();
         const dataProcessed = JSON.parse(dataString);
         if (dataProcessed.type === "input") {
@@ -70,5 +86,5 @@ server.on('connection', (ws) => {
                 }
             }));
         }
-    });
+    }));
 });

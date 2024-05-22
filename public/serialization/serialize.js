@@ -31,6 +31,7 @@ export function serializeBullet(bullet) {
         xVel: bullet.xVel,
         yVel: bullet.yVel,
         startTime: bullet.startTime,
+        summonerId: bullet.summonerId,
     };
 }
 export function serializeState(state) {

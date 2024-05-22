@@ -9,6 +9,7 @@ import Input from "../game/Input.js";
 import { STEP_LENGTH } from "../game/constants.js";
 import { clientStateEvents } from "./clientStateEvents.js";
 import { JoinEvent } from "./stateEventTypes.js";
+import { setOffset } from "./time.js";
 let ws;
 let referenceTime;
 function roundTime(time) {
@@ -31,6 +32,7 @@ function openSocket() {
             stateHistory.set(state.time, state);
             setCurrentState(state);
             referenceTime = state.time;
+            setOffset(data.time - new Date().getTime());
             startListening();
             loop();
         }

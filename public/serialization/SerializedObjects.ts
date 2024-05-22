@@ -25,6 +25,7 @@ export type SerializedBullet = {
     xVel: number,
     yVel: number,
     startTime: number,
+    summonerId: number,
 }
 
 export type SerializedState = {

@@ -7,10 +7,12 @@ export default class Bullet {
     xVel: number
     yVel: number
     startTime: number
+    summonerId: number
     constructor(
         x: number, y: number,
         xVel: number, yVel: number,
         startTime: number,
+        summonerId: number,
     ) {
         this.startX = x
         this.startY = y
@@ -19,5 +21,7 @@ export default class Bullet {
         this.yVel = yVel
 
         this.startTime = startTime
+
+        this.summonerId = summonerId
     }
 }

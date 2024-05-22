@@ -9,12 +9,15 @@ export const
     ROT_FRICTION = 0.9,
     DASH_POW = 6,
     DASH_COOLDOWN = 500,
+
     SHOOT_FRAMES = 54,
     SHOOT_POINT = 0.55,
     SHOOT_TIME = 50,
 
     BULLET_SIZE = 10,
     BULLET_SPEED = 0.75,
+    COLLISION_DISTANCE = 25,
+    KNOCKBACK = 4,
 
     FORWARD_KEYS = new Set(["ArrowUp", "KeyW"]),
     LEFT_KEYS = new Set(["ArrowLeft", "KeyA"]),

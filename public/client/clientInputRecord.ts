@@ -4,11 +4,12 @@ import InputType from "../game/InputType.js"
 import {DASH_COOLDOWN, DASH_KEYS, FORWARD_KEYS, LEFT_KEYS, RIGHT_KEYS, SHOOT_KEYS} from "../game/constants.js"
 import {ws} from "./ws.js";
 import {deserializeInput} from "../serialization/deserialize.js";
+import {getTime} from "./time.js";
 
 let keys = new Set<string>()
 let dir = 0
 
-let lastDash = new Date().getTime()
+let lastDash = getTime()
 let dashing = false
 
 let clientInputRecord: InputRecord
@@ -28,7 +29,7 @@ function sharesElements<T>(a: Set<T>, b: Set<T>){
 }
 
 function recordInput(inputType: InputType){
-    let input = new Input(new Date().getTime(), inputType)
+    let input = new Input(getTime(), inputType)
     clientInputRecord.inputs.push(input)
     ws.send(JSON.stringify({
         type: "input",
@@ -39,7 +40,7 @@ function recordInput(inputType: InputType){
 }
 
 function keydown(e: KeyboardEvent){
-    let now = new Date().getTime()
+    let now = getTime()
     if(!keys.has(e.code)){
         if(FORWARD_KEYS.has(e.code)){
             recordInput(InputType.FORWARD)

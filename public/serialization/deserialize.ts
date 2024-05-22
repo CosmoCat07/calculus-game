@@ -38,6 +38,7 @@ export function deserializeBullet(bullet: SerializedBullet){
         bullet.startX, bullet.startY,
         bullet.xVel, bullet.yVel,
         bullet.startTime,
+        bullet.summonerId
     )
 }
 

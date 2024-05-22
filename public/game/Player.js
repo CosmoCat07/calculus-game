@@ -1,5 +1,5 @@
 import InputRecord from "./InputRecord.js";
-import { BULLET_SPEED, DASH_POW, FRICTION, ROT_FRICTION, ROT_SPEED, SHOOT_POINT, SHOOT_TIME, SLIDE_FRICTION, SPEED, STEP_LENGTH } from "./constants.js";
+import { BULLET_SPEED, COLLISION_DISTANCE, DASH_POW, FRICTION, KNOCKBACK, ROT_FRICTION, ROT_SPEED, SHOOT_POINT, SHOOT_TIME, SLIDE_FRICTION, SPEED, STEP_LENGTH } from "./constants.js";
 import InputType from "./InputType.js";
 import Bullet from "./Bullet.js";
 export default class Player {
@@ -69,12 +69,23 @@ export default class Player {
         this.rotVel += ROT_SPEED * this.turn;
         if (this.shootProgress < 1) {
             if (this.shootProgress < SHOOT_POINT && this.shootProgress + 1 / SHOOT_TIME >= SHOOT_POINT) {
-                state.bullets.add(new Bullet(this.x, this.y, BULLET_SPEED * Math.cos(this.rot), BULLET_SPEED * Math.sin(this.rot), state.time));
+                state.bullets.add(new Bullet(this.x, this.y, BULLET_SPEED * Math.cos(this.rot), BULLET_SPEED * Math.sin(this.rot), state.time, this.inputRecord.id));
             }
             this.shootProgress += 1 / SHOOT_TIME;
         }
     }
-    collide() {
+    collide(state) {
+        const now = state.time;
+        for (let bullet of state.bullets) {
+            const bulletX = bullet.startX + bullet.xVel * (now - bullet.startTime);
+            const bulletY = bullet.startY + bullet.yVel * (now - bullet.startTime);
+            if (Math.sqrt((this.x - bulletX) ** 2 + (this.y - bulletY) ** 2) < COLLISION_DISTANCE && bullet.summonerId != this.inputRecord.id) {
+                this.xVel += bullet.xVel / BULLET_SPEED * KNOCKBACK;
+                this.yVel += bullet.yVel / BULLET_SPEED * KNOCKBACK;
+                this.slide = 0;
+                state.bullets.delete(bullet);
+            }
+        }
         this.x += this.xVel;
         this.y += this.yVel;
         this.rot += this.rotVel;
