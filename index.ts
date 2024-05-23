@@ -27,7 +27,7 @@ interface InputData {
     input: SerializedInput
 }
 
-const socketList = new Array<WebSocket>()
+const socketList = new Set<WebSocket>()
 
 function sendAll(message: String){
     socketList.forEach((socket) => socket.send(message))
@@ -40,7 +40,7 @@ async function delay(time: number){
 }
 
 server.on('connection', (ws) => {
-    socketList.push(ws)
+    socketList.add(ws)
 
     const id = serverState.playersJoined
     serverState.playersJoined++
@@ -102,5 +102,18 @@ server.on('connection', (ws) => {
                 }
             }))
         }
+    })
+    ws.on('close', () => {
+        serverState.state.players.forEach((player) => {
+            if(player.inputRecord.id == id){
+                serverState.state.players.delete(player)
+            }
+        })
+        socketList.delete(ws)
+        sendAll(JSON.stringify({type: "disconnect",
+        data: {
+            id: id,
+            time: Date.now()
+        }}))
     })
 })

@@ -8,7 +8,7 @@ import InputRecord from "../game/InputRecord.js";
 import Input from "../game/Input.js";
 import { STEP_LENGTH } from "../game/constants.js";
 import { clientStateEvents } from "./clientStateEvents.js";
-import { JoinEvent } from "./stateEventTypes.js";
+import { DisconnectEvent, JoinEvent } from "./stateEventTypes.js";
 import { setOffset } from "./time.js";
 let ws;
 let referenceTime;
@@ -62,6 +62,10 @@ function openSocket() {
                     setCurrentState(stateHistory.get(roundedTime));
                 }
             }
+        }
+        else if (eventData.type === "disconnect") {
+            const data = eventData.data;
+            clientStateEvents.push(new DisconnectEvent(data.time, data.id));
         }
         // Handle other events like player creation and deletion, or other stuff
     };

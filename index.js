@@ -19,7 +19,7 @@ const port = 3000;
 const app = express();
 app.use(express.static('public', { index: "./client/index.html" }));
 const serverState = new ServerState();
-const socketList = new Array();
+const socketList = new Set();
 function sendAll(message) {
     socketList.forEach((socket) => socket.send(message));
 }
@@ -30,7 +30,7 @@ function delay(time) {
     });
 }
 server.on('connection', (ws) => {
-    socketList.push(ws);
+    socketList.add(ws);
     const id = serverState.playersJoined;
     serverState.playersJoined++;
     const newInputRecord = new InputRecord(id);
@@ -87,4 +87,17 @@ server.on('connection', (ws) => {
             }));
         }
     }));
+    ws.on('close', () => {
+        serverState.state.players.forEach((player) => {
+            if (player.inputRecord.id == id) {
+                serverState.state.players.delete(player);
+            }
+        });
+        socketList.delete(ws);
+        sendAll(JSON.stringify({ type: "disconnect",
+            data: {
+                id: id,
+                time: Date.now()
+            } }));
+    });
 });

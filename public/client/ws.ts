@@ -11,7 +11,7 @@ import InputType from "../game/InputType.js";
 import {STEP_LENGTH} from "../game/constants.js";
 import State from "../game/State.js";
 import {clientStateEvents} from "./clientStateEvents.js";
-import {JoinEvent} from "./stateEventTypes.js";
+import {DisconnectEvent, JoinEvent} from "./stateEventTypes.js";
 import {setOffset} from "./time.js";
 
 let ws: WebSocket
@@ -22,7 +22,7 @@ declare global {
 }
 
 interface EventData {
-    type: "init" | "input" | "join"
+    type: "init" | "input" | "join" | "disconnect"
     data: InitData | InputData | JoinData
 }
 
@@ -43,6 +43,11 @@ interface JoinData {
     id: number,
     time: number,
     player: SerializedPlayer,
+}
+
+interface DisconnectData {
+    id: number,
+    time: number
 }
 
 function roundTime(time: number){
@@ -105,6 +110,10 @@ function openSocket() {
                     setCurrentState(stateHistory.get(roundedTime) as State)
                 }
             }
+        } else if (eventData.type === "disconnect") {
+            const data = eventData.data as DisconnectData
+
+            clientStateEvents.push(new DisconnectEvent(data.time, data.id))
         }
         // Handle other events like player creation and deletion, or other stuff
     }
