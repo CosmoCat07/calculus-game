@@ -37,7 +37,9 @@ export function serializePlayer(player: Player): SerializedPlayer {
         rot: player.rot, rotVel: player.rotVel,
         shootProgress: player.shootProgress,
         turn: player.turn, move: player.move, slide: player.slide,
-        inputId: player.inputRecord.id
+        inputId: player.inputRecord.id,
+        hp: player.hp, kills: player.kills,
+        name: player.name,
     }
 }
 

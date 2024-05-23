@@ -16,6 +16,7 @@ function roundTime(time) {
     return referenceTime + Math.floor((time - referenceTime) / STEP_LENGTH) * STEP_LENGTH;
 }
 let hasBeenInit = false;
+let name = prompt("Display name", "Shefler");
 function openSocket() {
     let url = ((location.protocol === "http:" || location.hostname === "localhost") ? "ws:" : "wss:") + location.host + location.pathname;
     ws = new WebSocket(url + "socket");
@@ -25,7 +26,9 @@ function openSocket() {
         sendTime = Date.now();
         ws.send(JSON.stringify({
             type: "init",
-            data: {}
+            data: {
+                name: name
+            }
         }));
     };
     ws.onmessage = (event) => {

@@ -17,6 +17,8 @@ export type SerializedPlayer = {
     shootProgress: number,
     turn: number, move: number, slide: number,
     inputId: number,
+    hp: number, kills: number,
+    name: string,
 }
 
 export type SerializedBullet = {

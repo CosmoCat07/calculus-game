@@ -54,9 +54,10 @@ server.on('connection', (ws) => {
         const dataString = dataRaw.toString();
         const dataProcessed = JSON.parse(dataString);
         if (dataProcessed.type == "init") {
+            const data = dataProcessed.data;
             const newInputRecord = new InputRecord(id);
             serverState.inputRecords.set(id, newInputRecord);
-            const newPlayer = new Player(newInputRecord);
+            const newPlayer = new Player(newInputRecord, data.name);
             serverState.state.players.add(newPlayer);
             sendAll(JSON.stringify({
                 type: "join",

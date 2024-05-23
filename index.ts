@@ -24,7 +24,9 @@ interface InputData {
     input: SerializedInput
 }
 
-interface InitData {}
+interface InitData {
+    name: string
+}
 
 const socketList = new Set<WebSocket>()
 
@@ -66,11 +68,12 @@ server.on('connection', (ws) => {
         const dataString = dataRaw.toString()
         const dataProcessed = JSON.parse(dataString) as EventData
         if (dataProcessed.type == "init"){
+            const data = dataProcessed.data as InitData
 
             const newInputRecord = new InputRecord(id)
             serverState.inputRecords.set(id, newInputRecord)
 
-            const newPlayer = new Player(newInputRecord)
+            const newPlayer = new Player(newInputRecord, data.name)
             serverState.state.players.add(newPlayer)
 
             sendAll(JSON.stringify({

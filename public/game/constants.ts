@@ -25,6 +25,9 @@ export const
     SIZE_PER_PLAYER = 50000,
     WALL_FORCE = 1.5,
 
+    NAME_HEIGHT = 40,
+    INFO_HEIGHT = 30,
+
     FORWARD_KEYS = new Set(["ArrowUp", "KeyW"]),
     LEFT_KEYS = new Set(["ArrowLeft", "KeyA"]),
     RIGHT_KEYS = new Set(["ArrowRight", "KeyD"]),

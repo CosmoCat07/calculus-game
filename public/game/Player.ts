@@ -14,7 +14,6 @@ import InputType from "./InputType.js"
 import {ctx} from "../client/canvas.js"
 import State from "./State.js"
 import Bullet from "./Bullet.js"
-import {inputRecords} from "../client/inputRecords.js";
 
 export default class Player {
     inputRecord: InputRecord
@@ -32,14 +31,20 @@ export default class Player {
 
     shootProgress: number
 
+    hp: number
+    kills: number
+
+    name: string
 
     constructor(
         inputs = new InputRecord(0),
-        x = 0, y = 0,
-        xVel = 0, yVel = 0,
-        rot = 0, rotVel = 0,
-        shootProgress = 1,
-        turn = 0, move = 0, slide = 0,
+        name = "", x = 0,
+        y = 0, xVel = 0,
+        yVel = 0, rot = 0,
+        rotVel = 0,
+        shootProgress = 1, turn = 0, move = 0,
+        slide = 0, hp = 3,
+        kills = 0,
     ) {
         this.x = x
         this.y = y
@@ -52,6 +57,9 @@ export default class Player {
         this.move = move
         this.slide = slide
         this.inputRecord = inputs
+        this.hp = hp
+        this.kills = kills
+        this.name = name
     }
 
     dash(){
@@ -134,6 +142,23 @@ export default class Player {
                 this.yVel += bullet.yVel/BULLET_SPEED*KNOCKBACK
                 this.slide = 0
                 state.bullets.delete(bullet)
+                this.hp --
+                if(this.hp <= 0){
+                    let killer
+                    for(let player of state.players){
+                        if(player.inputRecord.id == bullet.summonerId){
+                            killer = player
+                        }
+                    }
+                    if(killer){
+                        killer.kills ++
+                    }
+                    this.hp = 3
+                    this.x *= -1
+                    this.y *= -1
+                    this.xVel = 0
+                    this.yVel = 0
+                }
             }
         }
         const dist = Math.sqrt(this.x**2 + this.y**2)
@@ -158,13 +183,6 @@ export default class Player {
     }
 
     copy() {
-        return new Player(
-            this.inputRecord,
-            this.x, this.y,
-            this.xVel, this.yVel,
-            this.rot, this.rotVel,
-            this.shootProgress,
-            this.turn, this.move, this.slide
-        )
+        return new Player(this.inputRecord, this.name, this.x, this.y, this.xVel, this.yVel, this.rot, this.rotVel, this.shootProgress, this.turn, this.move, this.slide, this.hp, this.kills)
     }
 }
