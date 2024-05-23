@@ -39,6 +39,8 @@ async function delay(time: number){
     return new Promise<number>(resolve => setTimeout(resolve, time))
 }
 
+// setInterval()
+
 server.on('connection', (ws) => {
     socketList.add(ws)
 
@@ -59,7 +61,7 @@ server.on('connection', (ws) => {
         type: "init",
         data: {
             id: id,
-            time: new Date().getTime(),
+            time: Date.now(), //new Date().getTime(),
             state: serializeState(serverState.state),
             inputRecords: serializedInputRecords,
         },
