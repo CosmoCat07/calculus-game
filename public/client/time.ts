@@ -1,8 +1,8 @@
 let offset = 0
 
 function getTime(){
-    // return new Date().getTime() + offset
-    return Date.now()
+    return Date.now() + offset
+    // return Date.now()
 }
 
 function setOffset(newOffset: number){
