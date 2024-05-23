@@ -1,13 +1,10 @@
 import express from "express"
-import State from "./public/game/State.js";
 import Player from "./public/game/Player.js";
 import InputRecord from "./public/game/InputRecord.js";
 import {serializeInputRecord, serializePlayer, serializeState} from "./public/serialization/serialize.js";
-import {inputRecords} from "./public/client/inputRecords.js";
 import {ServerState} from "./ServerState.js";
 import {SerializedInput, SerializedInputRecord} from "./public/serialization/SerializedObjects.js";
 import {deserializeInput} from "./public/serialization/deserialize.js";
-import Input from "./public/game/Input.js";
 import WebSocket from 'ws';
 import {STEP_LENGTH} from "./public/game/constants.js";
 const port = 3000
@@ -64,25 +61,26 @@ server.on('connection', (ws) => {
     const id = serverState.playersJoined
     serverState.playersJoined++
 
-    const newInputRecord = new InputRecord(id)
-    serverState.inputRecords.set(id, newInputRecord)
-
-    const newPlayer = new Player(newInputRecord)
-    serverState.state.players.add(newPlayer)
-
-    sendAll(JSON.stringify({
-        type: "join",
-        data: {
-            id: id,
-            time: Date.now(),
-            player: serializePlayer(newPlayer),
-        }
-    }))
     ws.on('message', async (dataRaw: Buffer) => {
         // await delay(200)
         const dataString = dataRaw.toString()
         const dataProcessed = JSON.parse(dataString) as EventData
         if (dataProcessed.type == "init"){
+
+            const newInputRecord = new InputRecord(id)
+            serverState.inputRecords.set(id, newInputRecord)
+
+            const newPlayer = new Player(newInputRecord)
+            serverState.state.players.add(newPlayer)
+
+            sendAll(JSON.stringify({
+                type: "join",
+                data: {
+                    id: id,
+                    time: Date.now(),
+                    player: serializePlayer(newPlayer),
+                }
+            }))
             socketList.add(ws)
             const serializedInputRecords = new Array<SerializedInputRecord>()
             for(let inputRecord of serverState.inputRecords.values()){

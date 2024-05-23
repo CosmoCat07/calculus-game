@@ -49,23 +49,23 @@ setInterval(() => {
 server.on('connection', (ws) => {
     const id = serverState.playersJoined;
     serverState.playersJoined++;
-    const newInputRecord = new InputRecord(id);
-    serverState.inputRecords.set(id, newInputRecord);
-    const newPlayer = new Player(newInputRecord);
-    serverState.state.players.add(newPlayer);
-    sendAll(JSON.stringify({
-        type: "join",
-        data: {
-            id: id,
-            time: Date.now(),
-            player: serializePlayer(newPlayer),
-        }
-    }));
     ws.on('message', (dataRaw) => __awaiter(void 0, void 0, void 0, function* () {
         // await delay(200)
         const dataString = dataRaw.toString();
         const dataProcessed = JSON.parse(dataString);
         if (dataProcessed.type == "init") {
+            const newInputRecord = new InputRecord(id);
+            serverState.inputRecords.set(id, newInputRecord);
+            const newPlayer = new Player(newInputRecord);
+            serverState.state.players.add(newPlayer);
+            sendAll(JSON.stringify({
+                type: "join",
+                data: {
+                    id: id,
+                    time: Date.now(),
+                    player: serializePlayer(newPlayer),
+                }
+            }));
             socketList.add(ws);
             const serializedInputRecords = new Array();
             for (let inputRecord of serverState.inputRecords.values()) {

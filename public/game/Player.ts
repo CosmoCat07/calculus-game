@@ -5,10 +5,10 @@ import {
     FRICTION, KNOCKBACK,
     ROT_FRICTION,
     ROT_SPEED, SHOOT_FRAMES, SHOOT_POINT, SHOOT_TIME,
-    SIZE,
+    SIZE, SIZE_PER_PLAYER,
     SLIDE_FRICTION,
     SPEED,
-    STEP_LENGTH
+    STEP_LENGTH, WALL_FORCE
 } from "./constants.js"
 import InputType from "./InputType.js"
 import {ctx} from "../client/canvas.js"
@@ -135,6 +135,19 @@ export default class Player {
                 this.slide = 0
                 state.bullets.delete(bullet)
             }
+        }
+        const dist = Math.sqrt(this.x**2 + this.y**2)
+        const xComp = this.x / dist
+        const yComp = this.y / dist
+        const mapRadius = Math.sqrt(state.players.size*SIZE_PER_PLAYER)
+        if(dist > mapRadius){
+            let inward = xComp * this.xVel + yComp * this.yVel
+            if(inward > 0) {
+                this.xVel -= inward * xComp * WALL_FORCE
+                this.yVel -= inward * yComp * WALL_FORCE
+            }
+            this.x = xComp * mapRadius
+            this.y = yComp * mapRadius
         }
 
 

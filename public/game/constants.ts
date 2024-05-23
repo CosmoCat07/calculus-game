@@ -19,6 +19,12 @@ export const
     COLLISION_DISTANCE = 25,
     KNOCKBACK = 4,
 
+    CAMERA_ACCELERATION = 0.005,
+    CAMERA_FRICTION = 0.8,
+
+    SIZE_PER_PLAYER = 50000,
+    WALL_FORCE = 1.5,
+
     FORWARD_KEYS = new Set(["ArrowUp", "KeyW"]),
     LEFT_KEYS = new Set(["ArrowLeft", "KeyA"]),
     RIGHT_KEYS = new Set(["ArrowRight", "KeyD"]),

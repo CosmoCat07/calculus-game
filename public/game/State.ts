@@ -20,6 +20,9 @@ export default class State {
         for(const player of this.players){
             player.collide(this)
         }
+        for(const bullet of this.bullets){
+            bullet.update(this)
+        }
         this.time += STEP_LENGTH
     }
 

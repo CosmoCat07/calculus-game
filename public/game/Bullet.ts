@@ -1,5 +1,5 @@
-import {ctx} from "../client/canvas.js"
-import {BULLET_SIZE} from "./constants.js"
+import {SIZE_PER_PLAYER} from "./constants.js"
+import State from "./State.js";
 
 export default class Bullet {
     startX: number
@@ -23,5 +23,13 @@ export default class Bullet {
         this.startTime = startTime
 
         this.summonerId = summonerId
+    }
+    update(state: State){
+        const x = this.startX + this.xVel*(state.time - this.startTime)
+        const y = this.startY + this.yVel*(state.time - this.startTime)
+        const mapRadius = Math.sqrt(state.players.size*SIZE_PER_PLAYER)
+        if(Math.sqrt(x**2 + y**2) > mapRadius){
+            state.bullets.delete(this)
+        }
     }
 }
