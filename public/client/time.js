@@ -1,9 +1,9 @@
 let offset = 0;
 function getTime() {
-    return new Date().getTime() + offset;
+    return Date.now() + offset;
     // return Date.now()
 }
-function setOffset(newOffset) {
-    offset = newOffset;
+function setCurrentTime(newTime) {
+    offset = newTime - Date.now();
 }
-export { offset, getTime, setOffset };
+export { offset, getTime, setCurrentTime };

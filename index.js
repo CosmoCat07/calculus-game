@@ -29,28 +29,30 @@ function delay(time) {
         return new Promise(resolve => setTimeout(resolve, time));
     });
 }
-// setInterval()
+setInterval(() => {
+    // while(serverState.state.time + STEP_LENGTH < oldestInput){
+    //     // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
+    //     serverState.state.step()
+    // }
+    const serializedInputRecords = new Array();
+    for (let inputRecord of serverState.inputRecords.values()) {
+        serializedInputRecords.push(serializeInputRecord(inputRecord));
+    }
+    sendAll(JSON.stringify({
+        type: "init",
+        data: {
+            state: serializeState(serverState.state),
+            inputRecords: serializedInputRecords,
+        },
+    }));
+}, 1000);
 server.on('connection', (ws) => {
-    socketList.add(ws);
     const id = serverState.playersJoined;
     serverState.playersJoined++;
     const newInputRecord = new InputRecord(id);
     serverState.inputRecords.set(id, newInputRecord);
     const newPlayer = new Player(newInputRecord);
     serverState.state.players.add(newPlayer);
-    const serializedInputRecords = new Array();
-    for (let inputRecord of serverState.inputRecords.values()) {
-        serializedInputRecords.push(serializeInputRecord(inputRecord));
-    }
-    ws.send(JSON.stringify({
-        type: "init",
-        data: {
-            id: id,
-            time: Date.now(), //new Date().getTime(),
-            state: serializeState(serverState.state),
-            inputRecords: serializedInputRecords,
-        },
-    }));
     sendAll(JSON.stringify({
         type: "join",
         data: {
@@ -63,6 +65,22 @@ server.on('connection', (ws) => {
         // await delay(200)
         const dataString = dataRaw.toString();
         const dataProcessed = JSON.parse(dataString);
+        if (dataProcessed.type == "init") {
+            socketList.add(ws);
+            const serializedInputRecords = new Array();
+            for (let inputRecord of serverState.inputRecords.values()) {
+                serializedInputRecords.push(serializeInputRecord(inputRecord));
+            }
+            ws.send(JSON.stringify({
+                type: "init",
+                data: {
+                    id: id,
+                    time: Date.now(), //new Date().getTime(),
+                    state: serializeState(serverState.state),
+                    inputRecords: serializedInputRecords,
+                },
+            }));
+        }
         if (dataProcessed.type === "input") {
             const data = dataProcessed.data;
             const input = deserializeInput(data.input);

@@ -5,8 +5,8 @@ function getTime(){
     // return Date.now()
 }
 
-function setOffset(newOffset: number){
-    offset = newOffset
+function setCurrentTime(newTime: number){
+    offset = newTime - Date.now()
 }
 
-export {offset, getTime, setOffset}
+export {offset, getTime, setCurrentTime}

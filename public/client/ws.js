@@ -9,32 +9,51 @@ import Input from "../game/Input.js";
 import { STEP_LENGTH } from "../game/constants.js";
 import { clientStateEvents } from "./clientStateEvents.js";
 import { DisconnectEvent, JoinEvent } from "./stateEventTypes.js";
-import { setOffset } from "./time.js";
+import { setCurrentTime } from "./time.js";
 let ws;
 let referenceTime;
 function roundTime(time) {
     return referenceTime + Math.floor((time - referenceTime) / STEP_LENGTH) * STEP_LENGTH;
 }
+let hasBeenInit = false;
 function openSocket() {
     let url = ((location.protocol === "http:" || location.hostname === "localhost") ? "ws:" : "wss:") + location.host + location.pathname;
     ws = new WebSocket(url + "socket");
     window.ws = ws;
+    let sendTime;
+    ws.onopen = () => {
+        sendTime = Date.now();
+        ws.send(JSON.stringify({
+            type: "init",
+            data: {}
+        }));
+    };
     ws.onmessage = (event) => {
+        var _a;
         // Set the state to be the initial state
         let eventData = JSON.parse(event.data);
         if (eventData.type == "init") {
             const data = eventData.data;
+            let id = (_a = data.id) !== null && _a !== void 0 ? _a : clientInputRecord.id;
+            let oldClientInputRecord = clientInputRecord;
             for (let inputRecord of data.inputRecords) {
                 inputRecords.set(inputRecord.id, deserializeInputRecord(inputRecord));
             }
-            setClientInputRecord(inputRecords.get(data.id));
+            setClientInputRecord(inputRecords.get(id));
             const state = deserializeState(data.state);
             stateHistory.set(state.time, state);
             setCurrentState(state);
-            referenceTime = state.time;
-            setOffset(data.time - new Date().getTime());
-            startListening();
-            loop();
+            if (oldClientInputRecord) {
+                clientInputRecord.inputs.push(...oldClientInputRecord.inputs.filter((input) => input.time >= state.time));
+            }
+            if (data.time) {
+                setCurrentTime(data.time + (Date.now() - sendTime) / 2);
+            }
+            if (!hasBeenInit) {
+                referenceTime = state.time;
+                startListening();
+                loop();
+            }
         }
         else if (eventData.type == "input") {
             const data = eventData.data;

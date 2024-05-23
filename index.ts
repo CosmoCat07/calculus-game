@@ -19,13 +19,15 @@ app.use(express.static('public', {index: "./client/index.html"}))
 const serverState = new ServerState()
 
 interface EventData {
-    type: "input"
-    data: InputData
+    type: "input" | "init"
+    data: InputData | InitData
 }
 
 interface InputData {
     input: SerializedInput
 }
+
+interface InitData {}
 
 const socketList = new Set<WebSocket>()
 
@@ -39,10 +41,25 @@ async function delay(time: number){
     return new Promise<number>(resolve => setTimeout(resolve, time))
 }
 
-// setInterval()
+setInterval(() => {
+    // while(serverState.state.time + STEP_LENGTH < oldestInput){
+    //     // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
+    //     serverState.state.step()
+    // }
+    const serializedInputRecords = new Array<SerializedInputRecord>()
+    for(let inputRecord of serverState.inputRecords.values()){
+        serializedInputRecords.push(serializeInputRecord(inputRecord))
+    }
+    sendAll(JSON.stringify({
+        type: "init",
+        data: {
+            state: serializeState(serverState.state),
+            inputRecords: serializedInputRecords,
+        },
+    }))
+}, 1000)
 
 server.on('connection', (ws) => {
-    socketList.add(ws)
 
     const id = serverState.playersJoined
     serverState.playersJoined++
@@ -53,19 +70,6 @@ server.on('connection', (ws) => {
     const newPlayer = new Player(newInputRecord)
     serverState.state.players.add(newPlayer)
 
-    const serializedInputRecords = new Array<SerializedInputRecord>()
-    for(let inputRecord of serverState.inputRecords.values()){
-        serializedInputRecords.push(serializeInputRecord(inputRecord))
-    }
-    ws.send(JSON.stringify({
-        type: "init",
-        data: {
-            id: id,
-            time: Date.now(), //new Date().getTime(),
-            state: serializeState(serverState.state),
-            inputRecords: serializedInputRecords,
-        },
-    }))
     sendAll(JSON.stringify({
         type: "join",
         data: {
@@ -78,6 +82,22 @@ server.on('connection', (ws) => {
         // await delay(200)
         const dataString = dataRaw.toString()
         const dataProcessed = JSON.parse(dataString) as EventData
+        if (dataProcessed.type == "init"){
+            socketList.add(ws)
+            const serializedInputRecords = new Array<SerializedInputRecord>()
+            for(let inputRecord of serverState.inputRecords.values()){
+                serializedInputRecords.push(serializeInputRecord(inputRecord))
+            }
+            ws.send(JSON.stringify({
+                type: "init",
+                data: {
+                    id: id,
+                    time: Date.now(), //new Date().getTime(),
+                    state: serializeState(serverState.state),
+                    inputRecords: serializedInputRecords,
+                },
+            }))
+        }
         if (dataProcessed.type === "input") {
             const data = dataProcessed.data as InputData
             const input = deserializeInput(data.input);
