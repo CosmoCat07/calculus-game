@@ -17,7 +17,7 @@ export function drawState(state, camera) {
         drawBullet(bullet, state.time);
     }
     ctx.restore();
-    let sortedPlayers = new Array(...state.players).sort((a, b) => a.kills - b.kills);
+    let sortedPlayers = new Array(...state.players).sort((a, b) => b.kills - a.kills);
     let len = Math.min(sortedPlayers.length, LEADERBOARD_SIZE);
     ctx.fillStyle = "brown";
     ctx.textAlign = "left";
