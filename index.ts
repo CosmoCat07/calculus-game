@@ -6,7 +6,7 @@ import {ServerState} from "./ServerState.js";
 import {SerializedInput, SerializedInputRecord} from "./public/serialization/SerializedObjects.js";
 import {deserializeInput} from "./public/serialization/deserialize.js";
 import WebSocket from 'ws';
-import {STEP_LENGTH} from "./public/game/constants.js";
+import {MAX_ROLLBACK, STEP_LENGTH} from "./public/game/constants.js";
 const port = 3000
 
 const app = express()
@@ -41,10 +41,9 @@ async function delay(time: number){
 }
 
 setInterval(() => {
-    // while(serverState.state.time + STEP_LENGTH < oldestInput){
-    //     // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
-    //     serverState.state.step()
-    // }
+    while(serverState.state.time + STEP_LENGTH < Date.now() - MAX_ROLLBACK){
+        serverState.state.step()
+    }
     const serializedInputRecords = new Array<SerializedInputRecord>()
     for(let inputRecord of serverState.inputRecords.values()){
         serializedInputRecords.push(serializeInputRecord(inputRecord))
@@ -103,18 +102,6 @@ server.on('connection', (ws) => {
             const data = dataProcessed.data as InputData
             const input = deserializeInput(data.input);
             (serverState.inputRecords.get(id) as InputRecord).inputs.push(input)
-            // console.log((serverState.inputRecords.get(id)))
-
-            let oldestInput = serverState.state.time
-            for(let inputRecord of serverState.inputRecords.values()){
-                if(inputRecord.inputs.length > 0) {
-                    oldestInput = Math.min(inputRecord.inputs[inputRecord.inputs.length - 1].time)
-                }
-            }
-            while(serverState.state.time + STEP_LENGTH < oldestInput){
-                // console.log(serverState.state.time + " to " + (serverState.state.time + STEP_LENGTH))
-                serverState.state.step()
-            }
 
             sendAll(JSON.stringify({
                 type: "input",

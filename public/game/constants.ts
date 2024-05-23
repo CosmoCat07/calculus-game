@@ -28,6 +28,8 @@ export const
     NAME_HEIGHT = 40,
     INFO_HEIGHT = 30,
 
+    MAX_ROLLBACK = 1000,
+
     FORWARD_KEYS = new Set(["ArrowUp", "KeyW"]),
     LEFT_KEYS = new Set(["ArrowLeft", "KeyA"]),
     RIGHT_KEYS = new Set(["ArrowRight", "KeyD"]),
