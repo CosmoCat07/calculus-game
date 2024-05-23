@@ -27,6 +27,7 @@ export const
 
     NAME_HEIGHT = 40,
     INFO_HEIGHT = 30,
+    LEADERBOARD_SIZE = 5,
 
     MAX_ROLLBACK = 1000,
 

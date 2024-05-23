@@ -1,6 +1,14 @@
 import Player from "../game/Player.js";
 import {canvas, ctx} from "./canvas.js";
-import {BULLET_SIZE, INFO_HEIGHT, NAME_HEIGHT, SHOOT_FRAMES, SIZE, SIZE_PER_PLAYER} from "../game/constants.js";
+import {
+    BULLET_SIZE,
+    INFO_HEIGHT,
+    LEADERBOARD_SIZE,
+    NAME_HEIGHT,
+    SHOOT_FRAMES,
+    SIZE,
+    SIZE_PER_PLAYER
+} from "../game/constants.js";
 import {shoot} from "./sprites.js";
 import State from "../game/State.js";
 import Bullet from "../game/Bullet.js";
@@ -22,6 +30,15 @@ export function drawState(state: State, camera: Camera){
         drawBullet(bullet, state.time)
     }
     ctx.restore()
+
+    let sortedPlayers = new Array(...state.players).sort((a, b) => a.kills - b.kills)
+    let len = Math.min(sortedPlayers.length, LEADERBOARD_SIZE)
+    ctx.fillStyle = "brown"
+    ctx.textAlign = "left"
+    ctx.font = "bold 20px serif"
+    for(let i = 0; i < len; i++){
+        ctx.fillText(`${sortedPlayers[i].name}: ${sortedPlayers[i].kills}`, 10, 10 + (i+1)*20)
+    }
 }
 
 export function drawPlayer(player: Player){
