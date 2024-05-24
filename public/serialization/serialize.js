@@ -23,7 +23,7 @@ export function serializePlayer(player) {
         turn: player.turn, move: player.move, slide: player.slide,
         inputId: player.inputRecord.id,
         hp: player.hp, kills: player.kills,
-        name: player.name,
+        name: player.name, active: player.active
     };
 }
 export function serializeBullet(bullet) {
@@ -48,6 +48,7 @@ export function serializeState(state) {
     return {
         time: state.time,
         players: serializedPlayers,
-        bullets: serializedBullets
+        bullets: serializedBullets,
+        mode: state.mode
     };
 }

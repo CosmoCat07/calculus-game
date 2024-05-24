@@ -1,9 +1,10 @@
 import { STEP_LENGTH } from "./constants.js";
 export default class State {
-    constructor(time = 0, players = new Set(), bullets = new Set()) {
+    constructor(time = 0, players = new Set(), bullets = new Set(), mode = "deathmatch") {
         this.time = time;
         this.players = players;
         this.bullets = bullets;
+        this.mode = mode;
     }
     step() {
         for (const player of this.players) {
@@ -26,6 +27,6 @@ export default class State {
         for (const bullet of this.bullets) {
             bullets.push(bullet);
         }
-        return new State(this.time, new Set(players), new Set(bullets));
+        return new State(this.time, new Set(players), new Set(bullets), this.mode);
     }
 }

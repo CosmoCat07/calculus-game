@@ -56,7 +56,7 @@ server.on('connection', (ws) => {
             const data = dataProcessed.data;
             const newInputRecord = new InputRecord(id);
             serverState.inputRecords.set(id, newInputRecord);
-            const newPlayer = new Player(newInputRecord, data.name);
+            const newPlayer = new Player(newInputRecord, data.name, serverState.state.mode == "deathmatch");
             serverState.state.players.add(newPlayer);
             sendAll(JSON.stringify({
                 type: "join",
@@ -84,15 +84,36 @@ server.on('connection', (ws) => {
         if (dataProcessed.type === "input") {
             const data = dataProcessed.data;
             const input = deserializeInput(data.input);
-            serverState.inputRecords.get(id).inputs.push(input);
-            sendAll(JSON.stringify({
-                type: "input",
-                data: {
-                    id: id,
-                    time: data.input.time,
-                    inputType: data.input.type,
-                }
-            }));
+            if (input.time >= serverState.state.time) {
+                serverState.inputRecords.get(id).inputs.push(input);
+                sendAll(JSON.stringify({
+                    type: "input",
+                    data: {
+                        id: id,
+                        time: data.input.time,
+                        inputType: data.input.type,
+                    }
+                }));
+            }
+        }
+        if (dataProcessed.type == "modeChange") {
+            if (serverState.state.mode == "deathmatch") {
+                serverState.state.mode = "elimination";
+                serverState.state.players.forEach((player) => {
+                    player.hp = Math.max(1, player.kills);
+                });
+            }
+            else {
+                serverState.state.mode = "deathmatch";
+                serverState.state.players.forEach((player) => {
+                    if (!player.active) {
+                        player.active = true;
+                        player.x = 0;
+                        player.y = 0;
+                    }
+                });
+            }
+            console.log(serverState.state.mode);
         }
     }));
     ws.on('close', () => {

@@ -52,6 +52,11 @@ function openSocket() {
             if (data.time) {
                 setCurrentTime(data.time + (Date.now() - sendTime) / 2);
             }
+            for (let [key] of stateHistory) {
+                if (key < state.time) {
+                    stateHistory.delete(key);
+                }
+            }
             if (!hasBeenInit) {
                 referenceTime = state.time;
                 startListening();

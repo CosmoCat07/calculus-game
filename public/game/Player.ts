@@ -11,7 +11,6 @@ import {
     STEP_LENGTH, WALL_FORCE
 } from "./constants.js"
 import InputType from "./InputType.js"
-import {ctx} from "../client/canvas.js"
 import State from "./State.js"
 import Bullet from "./Bullet.js"
 
@@ -36,15 +35,17 @@ export default class Player {
 
     name: string
 
+    active: boolean
+
     constructor(
         inputs = new InputRecord(0),
-        name = "", x = 0,
-        y = 0, xVel = 0,
-        yVel = 0, rot = 0,
-        rotVel = 0,
-        shootProgress = 1, turn = 0, move = 0,
-        slide = 0, hp = 3,
-        kills = 0,
+        name = "", active = true,
+        x = 0, y = 0,
+        xVel = 0, yVel = 0,
+        rot = 0,
+        rotVel = 0, shootProgress = 1, turn = 0,
+        move = 0, slide = 0,
+        hp = 3, kills = 0
     ) {
         this.x = x
         this.y = y
@@ -60,6 +61,7 @@ export default class Player {
         this.hp = hp
         this.kills = kills
         this.name = name
+        this.active = active
     }
 
     dash(){
@@ -69,13 +71,12 @@ export default class Player {
 
     shoot(state: State) {
         this.shootProgress = 0
-        // this.xVel -= 2*Math.cos(this.rot)
-        // this.yVel -= 2*Math.sin(this.rot)
     }
 
     update(state: State){
-        // console.log(`inputs from ${state.time} to ${state.time + STEP_LENGTH}`)
-        // console.log(this.inputRecord.id)
+        if(!this.active){
+            return
+        }
         for(let input of this.inputRecord.inputs){
             if(state.time <= input.time && input.time < state.time + STEP_LENGTH){
                 switch(input.type){
@@ -133,6 +134,9 @@ export default class Player {
     }
 
     collide(state: State) {
+        if(!this.active){
+            return
+        }
         const now = state.time
         for(let bullet of state.bullets) {
             const bulletX = bullet.startX + bullet.xVel*(now - bullet.startTime)
@@ -154,8 +158,12 @@ export default class Player {
                         killer.kills ++
                     }
                     this.hp = 3
-                    this.x *= -1
-                    this.y *= -1
+                    if(state.mode == "deathmatch") {
+                        this.x *= -1
+                        this.y *= -1
+                    }else{
+                        this.active = false
+                    }
                     this.xVel = 0
                     this.yVel = 0
                 }
@@ -164,7 +172,13 @@ export default class Player {
         const dist = Math.sqrt(this.x**2 + this.y**2)
         const xComp = this.x / dist
         const yComp = this.y / dist
-        const mapRadius = Math.sqrt(state.players.size*SIZE_PER_PLAYER)
+        let playerCount = 0
+        for(let player of state.players){
+            if(player.active){
+                playerCount ++
+            }
+        }
+        const mapRadius = Math.sqrt(playerCount*SIZE_PER_PLAYER)
         if(dist > mapRadius){
             let inward = xComp * this.xVel + yComp * this.yVel
             if(inward > 0) {
@@ -183,6 +197,6 @@ export default class Player {
     }
 
     copy() {
-        return new Player(this.inputRecord, this.name, this.x, this.y, this.xVel, this.yVel, this.rot, this.rotVel, this.shootProgress, this.turn, this.move, this.slide, this.hp, this.kills)
+        return new Player(this.inputRecord, this.name, this.active, this.x, this.y, this.xVel, this.yVel, this.rot, this.rotVel, this.shootProgress, this.turn, this.move, this.slide, this.hp, this.kills)
     }
 }

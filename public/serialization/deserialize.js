@@ -15,7 +15,7 @@ export function deserializeInputRecord(inputRecord) {
     return new InputRecord(inputRecord.id, inputs);
 }
 export function deserializePlayer(player) {
-    return new Player(inputRecords.get(player.inputId), player.name, player.x, player.y, player.xVel, player.yVel, player.rot, player.rotVel, player.shootProgress, player.turn, player.move, player.slide, player.hp, player.kills);
+    return new Player(inputRecords.get(player.inputId), player.name, player.active, player.x, player.y, player.xVel, player.yVel, player.rot, player.rotVel, player.shootProgress, player.turn, player.move, player.slide, player.hp, player.kills);
 }
 export function deserializeBullet(bullet) {
     return new Bullet(bullet.startX, bullet.startY, bullet.xVel, bullet.yVel, bullet.startTime, bullet.summonerId);
@@ -29,5 +29,5 @@ export function deserializeState(state) {
     for (let bullet of state.bullets) {
         bullets.add(deserializeBullet(bullet));
     }
-    return new State(state.time, players, bullets);
+    return new State(state.time, players, bullets, state.mode);
 }

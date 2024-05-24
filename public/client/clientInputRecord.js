@@ -34,6 +34,7 @@ function recordInput(inputType) {
 function keydown(e) {
     let now = getTime();
     if (!keys.has(e.code)) {
+        keys.add(e.code);
         if (FORWARD_KEYS.has(e.code)) {
             recordInput(InputType.FORWARD);
         }
@@ -55,8 +56,13 @@ function keydown(e) {
         if (SHOOT_KEYS.has(e.code)) {
             recordInput(InputType.SHOOT);
         }
+        if (keys.has("Digit1") && keys.has("KeyP") && keys.has("KeyV")) {
+            ws.send(JSON.stringify({
+                type: "modeChange",
+                data: {},
+            }));
+        }
     }
-    keys.add(e.code);
 }
 function keyup(e) {
     if (FORWARD_KEYS.has(e.code)) {

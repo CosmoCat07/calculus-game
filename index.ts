@@ -16,8 +16,8 @@ app.use(express.static('public', {index: "./client/index.html"}))
 const serverState = new ServerState()
 
 interface EventData {
-    type: "input" | "init"
-    data: InputData | InitData
+    type: "input" | "init" | "modeChange"
+    data: InputData | InitData | ModeChangeData
 }
 
 interface InputData {
@@ -27,6 +27,8 @@ interface InputData {
 interface InitData {
     name: string
 }
+
+interface ModeChangeData {}
 
 const socketList = new Set<WebSocket>()
 
@@ -72,7 +74,7 @@ server.on('connection', (ws) => {
             const newInputRecord = new InputRecord(id)
             serverState.inputRecords.set(id, newInputRecord)
 
-            const newPlayer = new Player(newInputRecord, data.name)
+            const newPlayer = new Player(newInputRecord, data.name, serverState.state.mode == "deathmatch")
             serverState.state.players.add(newPlayer)
 
             sendAll(JSON.stringify({
@@ -113,6 +115,24 @@ server.on('connection', (ws) => {
                     }
                 }))
             }
+        }
+        if (dataProcessed.type == "modeChange"){
+            if(serverState.state.mode == "deathmatch") {
+                serverState.state.mode = "elimination"
+                serverState.state.players.forEach((player) => {
+                    player.hp = Math.max(1, player.kills)
+                })
+            }else{
+                serverState.state.mode = "deathmatch"
+                serverState.state.players.forEach((player) => {
+                    if(!player.active) {
+                        player.active = true
+                        player.x = 0
+                        player.y = 0
+                    }
+                })
+            }
+            console.log(serverState.state.mode)
         }
     })
     ws.on('close', () => {

@@ -18,7 +18,7 @@ export type SerializedPlayer = {
     turn: number, move: number, slide: number,
     inputId: number,
     hp: number, kills: number,
-    name: string,
+    name: string, active: boolean
 }
 
 export type SerializedBullet = {
@@ -34,4 +34,5 @@ export type SerializedState = {
     time: number,
     players: Array<SerializedPlayer>,
     bullets: Array<SerializedBullet>,
+    mode: "deathmatch" | "elimination"
 }
