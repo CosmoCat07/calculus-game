@@ -7,6 +7,8 @@ import {SerializedInput, SerializedInputRecord} from "./public/serialization/Ser
 import {deserializeInput} from "./public/serialization/deserialize.js";
 import WebSocket from 'ws';
 import {MAX_ROLLBACK, STEP_LENGTH} from "./public/game/constants.js";
+import {inputRecords} from "./public/client/inputRecords.js";
+import {currentState} from "./public/client/currentState.js";
 const port = 3000
 
 const app = express()
@@ -48,6 +50,9 @@ setInterval(() => {
     }
     const serializedInputRecords = new Array<SerializedInputRecord>()
     for(let inputRecord of serverState.inputRecords.values()){
+        while(inputRecord.inputs[0] && inputRecord.inputs[0].time < serverState.state.time){
+            inputRecord.inputs.shift()
+        }
         serializedInputRecords.push(serializeInputRecord(inputRecord))
     }
     sendAll(JSON.stringify({

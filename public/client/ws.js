@@ -39,6 +39,7 @@ function openSocket() {
             const data = eventData.data;
             let id = (_a = data.id) !== null && _a !== void 0 ? _a : clientInputRecord.id;
             let oldClientInputRecord = clientInputRecord;
+            inputRecords.clear();
             for (let inputRecord of data.inputRecords) {
                 inputRecords.set(inputRecord.id, deserializeInputRecord(inputRecord));
             }
@@ -62,6 +63,8 @@ function openSocket() {
                 startListening();
                 loop();
             }
+            window.exposed.stateHistory = stateHistory;
+            window.exposed.inputRecords = inputRecords;
         }
         else if (eventData.type == "input") {
             const data = eventData.data;

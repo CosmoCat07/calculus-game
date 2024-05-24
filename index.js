@@ -35,6 +35,9 @@ setInterval(() => {
     }
     const serializedInputRecords = new Array();
     for (let inputRecord of serverState.inputRecords.values()) {
+        while (inputRecord.inputs[0] && inputRecord.inputs[0].time < serverState.state.time) {
+            inputRecord.inputs.shift();
+        }
         serializedInputRecords.push(serializeInputRecord(inputRecord));
     }
     sendAll(JSON.stringify({
