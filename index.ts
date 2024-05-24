@@ -101,16 +101,18 @@ server.on('connection', (ws) => {
         if (dataProcessed.type === "input") {
             const data = dataProcessed.data as InputData
             const input = deserializeInput(data.input);
-            (serverState.inputRecords.get(id) as InputRecord).inputs.push(input)
+            if(input.time >= serverState.state.time){
+                (serverState.inputRecords.get(id) as InputRecord).inputs.push(input)
 
-            sendAll(JSON.stringify({
-                type: "input",
-                data: {
-                    id: id,
-                    time: data.input.time,
-                    inputType: data.input.type,
-                }
-            }))
+                sendAll(JSON.stringify({
+                    type: "input",
+                    data: {
+                        id: id,
+                        time: data.input.time,
+                        inputType: data.input.type,
+                    }
+                }))
+            }
         }
     })
     ws.on('close', () => {
