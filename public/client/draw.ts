@@ -24,6 +24,12 @@ export function drawState(state: State, camera: Camera){
     ctx.arc(0, 0, Math.sqrt(filteredPlayers.length*SIZE_PER_PLAYER), 0, 2*Math.PI)
     ctx.fillStyle = "bisque"
     ctx.fill()
+    ctx.textAlign = "center"
+    ctx.textBaseline = "middle"
+    ctx.font = "bold 160px serif"
+    ctx.fillStyle = "antiquewhite"
+    ctx.fillText("769", 0, 0)
+    ctx.textBaseline = "alphabetic"
     for(const player of filteredPlayers){
         drawPlayer(player)
     }
